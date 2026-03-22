@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Vipin ValuMetrics</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F0F4FF;color:#1E293B;min-height:100vh}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield}
+#hdr{background:#fff;border-bottom:1px solid #E2E8F8;padding:0 28px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(67,97,238,.08);position:sticky;top:0;z-index:100}
+#logo-wrap{padding:10px 0}
+#logo{font-size:20px;font-weight:900;background:linear-gradient(135deg,#4361EE,#7209B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#logo-sub{color:#94A3B8;font-size:11px;margin-top:1px}
+#logo-contact{display:flex;gap:14px;margin-top:3px}
+#logo-contact span{font-size:11px;font-weight:700}
+#hdr-right{display:flex;gap:12px;align-items:center}
+.hdr-btn{padding:8px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;background:linear-gradient(135deg,#4361EE,#7209B7);border:none;color:#fff;font-family:inherit}
+.badge{background:linear-gradient(135deg,#F59E0B,#EC4899);border-radius:8px;padding:4px 12px;color:#fff;font-size:11px;font-weight:700}
+#tabs{background:#fff;border-bottom:1px solid #E2E8F8;padding:0 28px;display:flex;overflow-x:auto}
+.tab{padding:10px 18px;border:none;cursor:pointer;font-size:13px;font-weight:500;border-bottom:3px solid transparent;color:#475569;background:transparent;transition:all .2s;white-space:nowrap;font-family:inherit}
+.tab.active{font-weight:700;color:#4361EE;border-bottom-color:#4361EE}
+#yr-bar{background:#fff;border-bottom:2px solid #E2E8F8;padding:9px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.yl{font-size:12px;color:#6366F1;font-weight:700;white-space:nowrap}
+.ys{font-size:11px;color:#94A3B8;font-weight:600;white-space:nowrap}
+#start-inp{width:72px;border:2px solid #4361EE;border-radius:8px;padding:5px 6px;color:#4361EE;font-weight:800;font-size:15px;outline:none;font-family:inherit;background:#EEF2FF;text-align:center}
+#start-inp:focus{box-shadow:0 0 0 3px rgba(67,97,238,.2)}
+.yr-pill{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.yr-pill.act{background:#EEF2FF;color:#4361EE;border:1.5px solid #C7D2FE}
+.yr-pill.est{background:#FFF7ED;color:#F59E0B;border:1.5px solid #F59E0B}
+#content{padding:22px 28px;max-width:1400px;margin:0 auto}
+.kpi-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid #E2E8F8;border-radius:14px;padding:16px 20px;flex:1 1 150px;box-shadow:0 2px 12px rgba(67,97,238,.08)}
+.kpi-lbl{color:#94A3B8;font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.kpi-val{font-size:22px;font-weight:800;line-height:1.1}
+.kpi-sub{color:#94A3B8;font-size:11px;margin-top:4px}
+.sh{margin-bottom:16px}.sh-row{display:flex;align-items:center;gap:10px}
+.sh-bar{width:4px;height:22px;background:linear-gradient(#4361EE,#7209B7);border-radius:4px;flex-shrink:0}
+.sh-title{color:#1E293B;font-size:19px;font-weight:800}
+.sh-sub{color:#94A3B8;font-size:12px;margin:4px 0 0 14px}
+.card{background:#fff;border-radius:14px;padding:24px;margin-bottom:20px;border:1px solid #E2E8F8;box-shadow:0 2px 12px rgba(67,97,238,.06)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.chart-card{background:#fff;border-radius:14px;padding:20px;border:1px solid #E2E8F8;box-shadow:0 2px 12px rgba(67,97,238,.06)}
+.tbl-wrap{overflow-x:auto;border-radius:10px;border:1px solid #E2E8F8}
+table{width:100%;border-collapse:collapse}
+th{padding:9px 12px;text-align:right;color:#94A3B8;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid #E2E8F8;background:#F8FAFF;white-space:nowrap}
+th.left{text-align:left}
+td{padding:6px 12px;text-align:right;font-size:13px;border-bottom:1px solid #E2E8F8;font-family:'Courier New',monospace}
+td.left{text-align:left;font-family:'Segoe UI',Arial,sans-serif}
+td.i1{padding-left:28px}
+tr.stripe td{background:#FAFBFF}
+tr.sub td{background:#F8FAFF}
+tr.tot td{background:#EEF2FF}
+tr:not(.tot):not(.sub):not(.hr):not(.rh):hover td{background:#F1F5FE}
+tr.hr td{background:#EEF2FF;font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;text-align:left;font-family:'Segoe UI',Arial,sans-serif;border-top:1px solid #E2E8F8;color:#1E293B}
+tr.shr td{background:#F8FAFF;padding-left:24px;color:#94A3B8;font-family:'Segoe UI',Arial,sans-serif;font-size:12px}
+tr.rh td{font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:#F8FAFF;text-align:left;font-family:'Segoe UI',Arial,sans-serif;padding:8px 12px}
+.ctrl-row{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.ctrl-btn{padding:7px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;border:2px solid transparent}
+.num-inp{width:100%;border:none;text-align:right;font-size:13px;font-family:'Courier New',monospace;outline:none;padding:3px 5px;border-radius:5px;font-weight:600;background:transparent}
+.num-inp.est{color:#F59E0B}.num-inp.est:focus{box-shadow:0 0 0 2px #F59E0B;background:#FEF3C7}
+.num-inp.act{color:#4361EE}.num-inp.act:focus{box-shadow:0 0 0 2px #4361EE;background:#DBEAFE}
+.ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.af label{color:#94A3B8;font-size:11px;display:block;margin-bottom:4px;font-weight:600}
+.af input{background:#F8FAFF;border:1px solid #E2E8F8;border-radius:8px;padding:8px 12px;color:#1E293B;font-size:14px;outline:none;width:100%;font-family:'Courier New',monospace}
+.af input:focus{border-color:#4361EE;box-shadow:0 0 0 3px rgba(67,97,238,.1)}
+.do{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px;margin-top:20px}
+.db{border-radius:12px;padding:14px 16px;border:1px solid #E2E8F8}
+.dl{color:#94A3B8;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.dv{font-size:18px;font-weight:800}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.vbox{border-radius:14px;padding:24px;display:flex;flex-direction:column;justify-content:center}
+.hg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hc{border-radius:12px;padding:18px}.hct{font-weight:800;margin-bottom:10px;font-size:14px}
+.hc ol{padding-left:18px;color:#475569;font-size:13px;line-height:2}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:28px}
+.sf label{color:#94A3B8;font-size:11px;display:block;margin-bottom:4px;font-weight:600}
+.sf input{background:#F8FAFF;border:1px solid #E2E8F8;border-radius:8px;padding:8px 12px;color:#1E293B;font-size:14px;outline:none;width:100%}
+.sf input:focus{border-color:#4361EE}
+.tbl-note{margin-top:10px;color:#94A3B8;font-size:11px}
+#modal-ov{display:none;position:fixed;inset:0;background:rgba(30,41,59,.5);backdrop-filter:blur(6px);z-index:999;align-items:center;justify-content:center}
+#modal-ov.show{display:flex}
+#modal{background:#fff;border-radius:20px;padding:32px;width:min(660px,95vw);max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(67,97,238,.2)}
+.mt{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.mt-btn{padding:8px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;border:none;background:#F1F5F9;color:#475569}
+.mt-btn.active{background:#4361EE;color:#fff;font-weight:700}
+.mp{display:none}.mp.show{display:block}
+.csv-ta{width:100%;height:140px;background:#F8FAFF;border-radius:10px;border:1px solid #E2E8F8;padding:12px;color:#1E293B;font-size:12px;font-family:'Courier New',monospace;outline:none;resize:vertical}
+.mbtns{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.mbtn{padding:10px 24px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;border:none}
+.msg{padding:8px 14px;border-radius:8px;font-size:13px;margin-top:8px;display:none}
+.msg.show{display:block}.msg.ok{background:#F0FDF4;color:#10B981}.msg.err{background:#FEF2F2;color:#EF4444}
+#footer{text-align:center;padding:14px 28px;background:#fff;border-top:1px solid #E2E8F8;font-size:12px}
+@media(max-width:700px){.chart-grid,.mg,.hg{grid-template-columns:1fr}.kpi{flex:1 1 140px}#content,#hdr,#yr-bar{padding:10px 14px}}
+
+@media print{
+  #hdr,#tabs,#yr-bar,#footer,#modal-ov,.ctrl-btn,.ctrl-row,button{display:none!important}
+  body{background:#fff!important;font-size:11px}
+  #content{padding:0!important;max-width:100%!important}
+  .card{box-shadow:none!important;border:1px solid #ddd!important;break-inside:avoid;margin-bottom:12px!important;padding:14px!important}
+  .chart-grid{grid-template-columns:1fr 1fr!important}
+  .kpi-row{flex-wrap:wrap!important}
+  .kpi{min-width:120px!important}
+  table{font-size:10px!important}
+  th,td{padding:4px 8px!important}
+  #print-hdr{display:block!important}
+}
+#print-hdr{display:none}
+</style>
+</head>
+<body>
+<div id="hdr">
+  <div id="logo-wrap">
+    <div id="logo">Vipin&#39;s ValuMetrics&#8482;</div>
+    <div id="logo-sub">Company Valuation &amp; Financial Modelling Suite</div>
+    <div id="logo-contact">
+      <span style="color:#4361EE">&#128222; 8160203197</span>
+      <span id="hdr-email" style="color:#7209B7">&#9993; audit.vipin@gmail.com</span>
+    </div>
+  </div>
+  <div id="hdr-right">
+    <button class="hdr-btn" onclick="openModal()">&#128229; Import Data</button>
+    <button class="hdr-btn" onclick="printReport()" style="background:linear-gradient(135deg,#10B981,#06B6D4)">&#128438; Print / Export PDF</button>
+    <div><div style="color:#94A3B8;font-size:10px;text-align:right;letter-spacing:.1em">COMPANY</div><div id="hdr-co" style="font-weight:700;font-size:14px;text-align:right">Vipin Corporation Ltd.</div></div>
+    <div class="badge">3A + 2E</div>
+  </div>
+</div>
+<div id="tabs">
+  <button class="tab active" onclick="go('overview',this)">&#128202; Overview</button>
+  <button class="tab" onclick="go('pnl',this)">&#128200; P&amp;L</button>
+  <button class="tab" onclick="go('bs',this)">&#127963; Balance Sheet</button>
+  <button class="tab" onclick="go('ratios',this)">&#128208; Ratios</button>
+  <button class="tab" onclick="go('valuation',this)">&#128142; Valuation</button>
+  <button class="tab" onclick="go('help',this)">&#9881; Help</button>
+</div>
+<div id="yr-bar">
+  <span class="yl">&#128197; FISCAL YEARS</span>
+  <span class="ys">Starting FY:</span>
+  <input id="start-inp" type="number" value="2022" min="1990" max="2090" onchange="setStartYear(+this.value)">
+  <div id="yr-pills" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+  <span style="font-size:11px;color:#94A3B8;margin-left:auto">&#9432; Change start year to update all columns</span>
+</div>
+<div id="print-hdr" style="padding:16px 0 12px;border-bottom:3px solid #4361EE;margin-bottom:18px;display:flex;justify-content:space-between;align-items:flex-end">
+  <div>
+    <div style="font-size:22px;font-weight:900;color:#4361EE">Vipin&#39;s ValuMetrics&#8482;</div>
+    <div id="print-co-name" style="font-size:16px;font-weight:700;color:#1E293B;margin-top:4px"></div>
+    <div style="font-size:11px;color:#94A3B8;margin-top:2px">Company Valuation &amp; Financial Modelling Report</div>
+  </div>
+  <div style="text-align:right;font-size:11px;color:#475569">
+    <div>Tel: 8160203197</div>
+    <div>audit.vipin@gmail.com</div>
+    <div id="print-date" style="margin-top:4px;color:#94A3B8"></div>
+  </div>
+</div>
+<div id="content"></div>
+<div id="footer">
+  <span style="font-weight:900;background:linear-gradient(135deg,#4361EE,#7209B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Vipin&#39;s ValuMetrics&#8482;</span>
+  &nbsp;|&nbsp;<span style="color:#4361EE;font-weight:600">&#128222; 8160203197</span>
+  &nbsp;|&nbsp;<span id="ftr-email" style="color:#7209B7;font-weight:600">&#9993; audit.vipin@gmail.com</span>
+</div>
+<div id="modal-ov" onclick="if(event.target===this)closeModal()">
+  <div id="modal">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px">
+      <div><div style="font-size:20px;font-weight:800;color:#4361EE">&#128229; Import Financial Data</div>
+      <div style="color:#94A3B8;font-size:12px;margin-top:3px">Load your company data via CSV</div></div>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#94A3B8">&#10005;</button>
+    </div>
+    <div class="mt">
+      <button class="mt-btn active" onclick="mTab('guide',this)">&#128203; Guide</button>
+      <button class="mt-btn" onclick="mTab('pnl',this)">&#128200; P&amp;L Import</button>
+      <button class="mt-btn" onclick="mTab('bs',this)">&#127963; BS Import</button>
+    </div>
+    <div id="mp-guide" class="mp show">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="background:#EFF6FF;border:1px solid #4361EE;border-radius:12px;padding:18px">
+          <div style="color:#4361EE;font-weight:700;margin-bottom:8px">&#9998; Option A &mdash; Cell Edit</div>
+          <div style="color:#475569;font-size:13px;line-height:2">1. P&amp;L or Balance Sheet tab<br>2. Click &#128274; Unlock Actuals<br>3. Click any cell and type<br>4. Rows update instantly</div>
+        </div>
+        <div style="background:#FFF7ED;border:1px solid #F59E0B;border-radius:12px;padding:18px">
+          <div style="color:#F59E0B;font-weight:700;margin-bottom:8px">&#128229; Option B &mdash; CSV</div>
+          <div style="color:#475569;font-size:13px;line-height:2">1. Choose P&amp;L or BS Import<br>2. Download template<br>3. Fill 5 years of data<br>4. Paste &rarr; Parse &rarr; Apply</div>
+        </div>
+        <div style="grid-column:1/-1;background:#F8FAFF;border-radius:12px;padding:14px;font-family:monospace;font-size:12px;color:#475569">
+          P&amp;L: Revenue, COGS, OtherOpEx, DA, InterestExp, OtherIncome, TaxRate<br>
+          BS: Cash, Receivables, Inventory, OtherCA, GrossBlock, AccDepr, OtherNCA, Payables, ShortDebt, OtherCL, LongDebt, OtherNCL, ShareCapital
+        </div>
+      </div>
+    </div>
+    <div id="mp-pnl" class="mp">
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="mbtn" style="background:#06B6D4;color:#fff" onclick="dlTpl('pnl')">&#11015; Download Template</button>
+        <button class="mbtn" style="background:#4361EE;color:#fff" onclick="document.getElementById('fi-pnl').click()">&#128193; Upload CSV</button>
+        <input id="fi-pnl" type="file" accept=".csv,.txt" style="display:none" onchange="loadF(event,'pnl-ta')">
+      </div>
+      <textarea id="pnl-ta" class="csv-ta" placeholder="Field,FY2022,..."></textarea>
+      <div id="pnl-msg" class="msg"></div>
+      <div class="mbtns">
+        <button class="mbtn" style="background:#F1F5F9;border:2px solid #4361EE;color:#4361EE" onclick="doParse('pnl')">&#128269; Parse</button>
+        <button id="pnl-apply" class="mbtn" style="background:#4361EE;color:#fff;display:none" onclick="doApply('pnl')">&#10003; Apply</button>
+      </div>
+    </div>
+    <div id="mp-bs" class="mp">
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="mbtn" style="background:#06B6D4;color:#fff" onclick="dlTpl('bs')">&#11015; Download Template</button>
+        <button class="mbtn" style="background:#4361EE;color:#fff" onclick="document.getElementById('fi-bs').click()">&#128193; Upload CSV</button>
+        <input id="fi-bs" type="file" accept=".csv,.txt" style="display:none" onchange="loadF(event,'bs-ta')">
+      </div>
+      <textarea id="bs-ta" class="csv-ta" placeholder="Field,FY2022,..."></textarea>
+      <div id="bs-msg" class="msg"></div>
+      <div class="mbtns">
+        <button class="mbtn" style="background:#F1F5F9;border:2px solid #4361EE;color:#4361EE" onclick="doParse('bs')">&#128269; Parse</button>
+        <button id="bs-apply" class="mbtn" style="background:#4361EE;color:#fff;display:none" onclick="doApply('bs')">&#10003; Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+var startYear=2022,EST=[3,4],YR=[],YS=[];
+function updateYears(){
+  YR=[0,1,2,3,4].map(function(i){return i<3?'FY '+(startYear+i):'FY '+(startYear+i)+'E';});
+  YS=[0,1,2,3,4].map(function(i){var y=String(startYear+i).slice(-2);return i<3?"FY'"+y:"FY'"+y+'E';});
+  var pp=document.getElementById('yr-pills');
+  if(pp)pp.innerHTML=YR.map(function(y,i){return'<span class="yr-pill '+(i>=3?'est':'act')+'">'+y+'</span>';}).join('');
+  var inp=document.getElementById('start-inp');
+  if(inp&&+inp.value!==startYear)inp.value=startYear;
+}
+function setStartYear(y){var v=parseInt(y);if(v>1900&&v<2200)startYear=v;updateYears();render();}
+
+var ea=false,ct='overview',pParsed=null,bParsed=null;
+var co={name:'Vipin Corporation Ltd.',sector:'Manufacturing',currency:'INR (\u20B9 Cr)',reportingDate:'March',
+  currentPrice:450,sharesOutstanding:10,beta:1.2,riskFreeRate:7,equityRiskPremium:5.5,
+  terminalGrowthRate:3.5,wacc:12,costOfDebt:9,taxRate:25,targetDebtEquity:0.3};
+var pnl={revenue:[850,980,1120,1290,1480],cogs:[510,578,650,742,844],otherOpEx:[130,148,168,190,215],
+  da:[42,48,55,63,72],interestExp:[28,30,32,34,36],otherIncome:[8,10,12,14,16],taxRate:[25,25,25,25,25]};
+var bs={cash:[80,95,120,150,185],receivables:[130,155,175,200,230],inventory:[145,165,188,215,245],
+  otherCA:[30,35,40,45,50],grossBlock:[620,700,790,890,1000],accDepr:[180,228,283,346,418],
+  otherNCA:[45,50,55,60,65],payables:[90,105,120,138,158],shortDebt:[60,65,70,75,80],
+  otherCL:[40,45,50,55,60],longDebt:[200,190,180,170,160],otherNCL:[25,28,30,32,35],shareCapital:[100,100,100,100,100]};
+
+function derive(){
+  return YR.map(function(_,i){
+    var rev=pnl.revenue[i],cogs=pnl.cogs[i],opex=pnl.otherOpEx[i],da=pnl.da[i],
+        int_=pnl.interestExp[i],oi=pnl.otherIncome[i],tr=pnl.taxRate[i]/100;
+    var gp=rev-cogs,ebitda=gp-opex,ebit=ebitda-da,ebt=ebit-int_+oi,tax=ebt>0?ebt*tr:0,pat=ebt-tax;
+    var net=bs.grossBlock[i]-bs.accDepr[i],tca=bs.cash[i]+bs.receivables[i]+bs.inventory[i]+bs.otherCA[i];
+    var ta=tca+net+bs.otherNCA[i],tcl=bs.payables[i]+bs.shortDebt[i]+bs.otherCL[i],td=bs.shortDebt[i]+bs.longDebt[i];
+    var res=ta-tcl-bs.longDebt[i]-bs.otherNCL[i]-bs.shareCapital[i],eq=bs.shareCapital[i]+res,tl=tcl+bs.longDebt[i]+bs.otherNCL[i]+eq;
+    return{rev:rev,cogs:cogs,opex:opex,da:da,int:int_,oi:oi,tr:tr,tax:tax,gp:gp,ebitda:ebitda,ebit:ebit,ebt:ebt,pat:pat,
+      net:net,tca:tca,ta:ta,tcl:tcl,td:td,res:res,eq:eq,tl:tl,
+      gpm:rev?gp/rev*100:0,em:rev?ebitda/rev*100:0,opm:rev?ebit/rev*100:0,npm:rev?pat/rev*100:0,
+      de:eq?td/eq:0,cr:tcl?tca/tcl:0,roce:ta?ebit/ta*100:0,roe:eq?pat/eq*100:0};
+  });
+}
+
+function calcVal(d){
+  var w=co.wacc/100,g=co.terminalGrowthRate/100,tr=co.taxRate/100;
+  var fcf=YR.map(function(_,i){
+    var capex=i===0?0:Math.max(0,d[i].net-d[i-1].net+d[i].da);
+    return d[i].ebit*(1-tr)+d[i].da-capex;
+  });
+  var pvf=0;
+  EST.forEach(function(idx,j){pvf+=fcf[idx]/Math.pow(1+w,j+1);});
+  var tv=(fcf[4]*(1+g))/(w-g),pvt=tv/Math.pow(1+w,2),ev=pvf+pvt;
+  var eq_=ev-d[2].td,tp=co.sharesOutstanding?eq_/co.sharesOutstanding:0;
+  var up=co.currentPrice?((tp-co.currentPrice)/co.currentPrice)*100:0;
+  var mc=co.currentPrice*co.sharesOutstanding,ev2=mc+d[2].td-d[2].tca*0.3;
+  var pvRow=YR.map(function(_,i){return EST.indexOf(i)>=0?fcf[i]/Math.pow(1+w,EST.indexOf(i)+1):null;});
+  var dfRow=YR.map(function(_,i){return EST.indexOf(i)>=0?1/Math.pow(1+w,EST.indexOf(i)+1):null;});
+  return{fcf:fcf,pvf:pvf,pvt:pvt,tv:tv,ev:ev,eq:eq_,tp:tp,up:up,mc:mc,tr:tr,pvRow:pvRow,dfRow:dfRow,
+    ee:d[2].ebitda?ev2/d[2].ebitda:0,pe:d[2].pat?mc/d[2].pat:0,er:d[2].rev?ev2/d[2].rev:0,pb:d[2].eq?mc/d[2].eq:0};
+}
+
+function fm(v,d){d=d==null?1:d;return(v==null||isNaN(v))?'&mdash;':Number(v).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function pc(v){return(isNaN(v)||!isFinite(v))?'&mdash;':Number(v).toFixed(1)+'%';}
+function cg(c,p){return p?((c-p)/Math.abs(p))*100:null;}
+function aw(v){return v>=0?'&#9650; '+v.toFixed(1)+'%':'&#9660; '+Math.abs(v).toFixed(1)+'%';}
+function ycell(c,p){var v=cg(c,p);if(v===null)return'<td style="color:#94A3B8">&mdash;</td>';return'<td style="color:'+(v>=0?'#10B981':'#EF4444')+'">'+aw(v)+'</td>';}
+function isEst(i){return EST.indexOf(i)>=0;}
+function pInp(fld,i,val){if(!isEst(i)&&!ea)return'<td>'+fm(val)+'</td>';return'<td style="padding:3px 8px"><input class="num-inp '+(isEst(i)?'est':'act')+'" type="number" value="'+val+'" onchange="sP(\''+fld+'\','+i+',+this.value)"></td>';}
+function bInp(fld,i,val){if(!isEst(i)&&!ea)return'<td>'+fm(val)+'</td>';return'<td style="padding:3px 8px"><input class="num-inp '+(isEst(i)?'est':'act')+'" type="number" value="'+val+'" onchange="sB(\''+fld+'\','+i+',+this.value)"></td>';}
+function yhdr(){return YR.map(function(y,i){var c=isEst(i)?'#F59E0B':(ea?'#4361EE':'#94A3B8');return'<th style="color:'+c+'">'+y.replace('FY ','FY\'')+(isEst(i)||ea?' &#9998;':'')+'</th>';}).join('');}
+function ctrl(){return'<div class="ctrl-row"><button class="ctrl-btn" onclick="togEA()" style="background:'+(ea?'#EFF6FF':'#F1F5F9')+';border-color:'+(ea?'#4361EE':'#E2E8F8')+';color:'+(ea?'#4361EE':'#475569')+'">'+(ea?'&#128275; Actuals Unlocked':'&#128274; Actuals Locked &mdash; Click to Edit')+'</button><button class="ctrl-btn" onclick="openModal()" style="background:#FFF7ED;border-color:#F59E0B;color:#F59E0B">&#128229; Import CSV</button><span style="font-size:12px;color:#94A3B8">'+(ea?'<span style="color:#4361EE">&#9998; Blue=editable</span>':'Actuals read-only')+' <span style="color:#F59E0B">&#9632; Gold=Estimates</span></span></div>';}
+
+function svgBar(data,keys,clrs,H){H=H||210;var W=500,ML=52,MR=10,MT=10,MB=36,cW=W-ML-MR,cH=H-MT-MB;var all=[];data.forEach(function(d){keys.forEach(function(k){all.push(d[k]||0);});});var maxV=Math.max.apply(null,all)*1.12||1;var gW=cW/data.length,bW=gW*0.6/keys.length;var mag=Math.pow(10,Math.floor(Math.log10(maxV/4)));var step=mag*Math.ceil(maxV/4/mag)||1;var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:'+H+'px;overflow:visible">';for(var t=0;t<=maxV;t+=step){var y=MT+cH-(t/maxV)*cH;s+='<line x1="'+ML+'" y1="'+y+'" x2="'+(W-MR)+'" y2="'+y+'" stroke="#E2E8F8" stroke-width="1"/><text x="'+(ML-4)+'" y="'+(y+4)+'" text-anchor="end" fill="#94A3B8" font-size="10">'+(t>=1000?(t/1000).toFixed(1)+'k':Math.round(t))+'</text>';}data.forEach(function(d,di){var gX=ML+di*gW+gW*0.2;keys.forEach(function(k,ki){var v=d[k]||0,x=gX+ki*bW,h=(v/maxV)*cH,y=MT+cH-h;s+='<rect x="'+x+'" y="'+y+'" width="'+(bW-1)+'" height="'+h+'" fill="'+clrs[ki]+'" rx="3"/>';});s+='<text x="'+(ML+di*gW+gW/2)+'" y="'+(H-MB+16)+'" text-anchor="middle" fill="#94A3B8" font-size="10">'+d.yr+'</text>';});keys.forEach(function(k,ki){s+='<rect x="'+(ML+ki*90)+'" y="'+(H-10)+'" width="10" height="10" fill="'+clrs[ki]+'" rx="2"/><text x="'+(ML+ki*90+14)+'" y="'+H+'" fill="#475569" font-size="10">'+k+'</text>';});return s+'</svg>';}
+function svgLine(data,keys,clrs,H,unit){H=H||210;unit=unit||'';var W=500,ML=48,MR=10,MT=10,MB=36,cW=W-ML-MR,cH=H-MT-MB;var all=[];data.forEach(function(d){keys.forEach(function(k){all.push(d[k]||0);});});var minV=Math.min.apply(null,all)*0.9,maxV=Math.max.apply(null,all)*1.1||1;function xS(i){return ML+i*(cW/(data.length-1));}function yS(v){return MT+cH-((v-minV)/(maxV-minV))*cH;}var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:'+H+'px;overflow:visible">';[0,.25,.5,.75,1].forEach(function(f){var y=MT+cH-f*cH,v=minV+(maxV-minV)*f;s+='<line x1="'+ML+'" y1="'+y+'" x2="'+(W-MR)+'" y2="'+y+'" stroke="#E2E8F8" stroke-width="1"/><text x="'+(ML-4)+'" y="'+(y+4)+'" text-anchor="end" fill="#94A3B8" font-size="10">'+v.toFixed(1)+unit+'</text>';});keys.forEach(function(k,ki){var pts=data.map(function(d,i){return xS(i)+','+yS(d[k]||0);}).join(' ');s+='<polyline points="'+pts+'" fill="none" stroke="'+clrs[ki]+'" stroke-width="2.5" '+(ki===1?'stroke-dasharray="6,3"':'')+' stroke-linejoin="round"/>';data.forEach(function(d,i){s+='<circle cx="'+xS(i)+'" cy="'+yS(d[k]||0)+'" r="4" fill="'+clrs[ki]+'"/>';});});data.forEach(function(d,i){s+='<text x="'+xS(i)+'" y="'+(H-MB+16)+'" text-anchor="middle" fill="#94A3B8" font-size="10">'+d.yr+'</text>';});keys.forEach(function(k,ki){s+='<line x1="'+(ML+ki*100)+'" y1="'+(H-5)+'" x2="'+(ML+ki*100+16)+'" y2="'+(H-5)+'" stroke="'+clrs[ki]+'" stroke-width="3"/><text x="'+(ML+ki*100+20)+'" y="'+H+'" fill="#475569" font-size="10">'+k+'</text>';});return s+'</svg>';}
+function svgArea(data,keys,clrs,H){H=H||210;var W=500,ML=52,MR=10,MT=10,MB=36,cW=W-ML-MR,cH=H-MT-MB;var all=[];data.forEach(function(d){keys.forEach(function(k){all.push(d[k]||0);});});var maxV=Math.max.apply(null,all)*1.1||1;function xS(i){return ML+i*(cW/(data.length-1));}function yS(v){return MT+cH-(v/maxV)*cH;}var s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:'+H+'px;overflow:visible">';[0,.25,.5,.75,1].forEach(function(f){var y=MT+cH-f*cH,v=maxV*f;s+='<line x1="'+ML+'" y1="'+y+'" x2="'+(W-MR)+'" y2="'+y+'" stroke="#E2E8F8" stroke-width="1"/><text x="'+(ML-4)+'" y="'+(y+4)+'" text-anchor="end" fill="#94A3B8" font-size="10">'+(v>=1000?(v/1000).toFixed(1)+'k':Math.round(v))+'</text>';});keys.forEach(function(k,ki){var pts=data.map(function(d,i){return xS(i)+','+yS(d[k]||0);}).join(' ');s+='<polygon points="'+xS(0)+','+(MT+cH)+' '+pts+' '+xS(data.length-1)+','+(MT+cH)+'" fill="'+clrs[ki]+'" fill-opacity=".15"/><polyline points="'+pts+'" fill="none" stroke="'+clrs[ki]+'" stroke-width="2" stroke-linejoin="round"/>';});data.forEach(function(d,i){s+='<text x="'+xS(i)+'" y="'+(H-MB+16)+'" text-anchor="middle" fill="#94A3B8" font-size="10">'+d.yr+'</text>';});keys.forEach(function(k,ki){s+='<rect x="'+(ML+ki*90)+'" y="'+(H-10)+'" width="10" height="10" fill="'+clrs[ki]+'" rx="2" fill-opacity=".7"/><text x="'+(ML+ki*90+14)+'" y="'+H+'" fill="#475569" font-size="10">'+k+'</text>';});return s+'</svg>';}
+
+function renderOv(d,v){
+  var uc=v.up>=0?'#10B981':'#EF4444';
+  var kpis=[{l:'Market Cap',val:'&#8377; '+fm(v.mc)+' Cr',sub:'Rs '+co.currentPrice+'/share',c:'#4361EE'},{l:'Enterprise Value',val:'&#8377; '+fm(v.ev)+' Cr',sub:'Mkt Cap + Net Debt',c:'#7209B7'},{l:'DCF Target Price',val:'&#8377; '+fm(v.tp,0),sub:(v.up>=0?'&#9650;':'&#9660;')+' '+Math.abs(v.up).toFixed(1)+'% vs CMP',c:uc},{l:'EV/EBITDA',val:fm(v.ee)+'x',sub:YR[2],c:'#06B6D4'},{l:'P/E Ratio',val:fm(v.pe)+'x',sub:YR[2],c:'#6366F1'},{l:'P/BV',val:fm(v.pb)+'x',sub:YR[2],c:'#EC4899'}];
+  var cd=YS.map(function(yr,i){return{yr:yr,Revenue:d[i].rev,EBITDA:d[i].ebitda,PAT:d[i].pat,EBITDAMgn:+d[i].em.toFixed(1),PATMgn:+d[i].npm.toFixed(1)};});
+  var bsd=YS.map(function(yr,i){return{yr:yr,Assets:d[i].ta,Equity:d[i].eq,Debt:d[i].td};});
+  var rd=YS.map(function(yr,i){return{yr:yr,ROCE:+d[i].roce.toFixed(1),ROE:+d[i].roe.toFixed(1)};});
+  return'<div class="kpi-row">'+kpis.map(function(k){return'<div class="kpi" style="border-top:3px solid '+k.c+'"><div class="kpi-lbl">'+k.l+'</div><div class="kpi-val" style="color:'+k.c+'">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';}).join('')+'</div><div class="chart-grid"><div class="chart-card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Revenue &amp; Profitability</div></div><div class="sh-sub">&#8377; Crores</div></div>'+svgBar(cd,['Revenue','EBITDA','PAT'],['#CBD5E1','#4361EE','#10B981'])+'</div><div class="chart-card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Margin Trends</div></div><div class="sh-sub">%</div></div>'+svgLine(cd,['EBITDAMgn','PATMgn'],['#4361EE','#10B981'],210,'%')+'</div><div class="chart-card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Balance Sheet Structure</div></div><div class="sh-sub">&#8377; Crores</div></div>'+svgArea(bsd,['Assets','Equity','Debt'],['#94A3B8','#4361EE','#EF4444'])+'</div><div class="chart-card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Return Ratios</div></div><div class="sh-sub">%</div></div>'+svgLine(rd,['ROCE','ROE'],['#7209B7','#F59E0B'],210,'%')+'</div></div>';
+}
+
+function renderPnL(d){
+  var rows=[{l:'Net Revenue / Sales',fld:'revenue',bold:1},{l:'Cost of Goods Sold',fld:'cogs',cls:'i1'},{l:'Gross Profit',cmp:function(i){return d[i].gp;},bold:1,sub:1},{l:'Gross Profit Margin %',cmp:function(i){return d[i].gpm;},fmt:pc,cls:'i1',clr:'#06B6D4'},{l:'Other Operating Expenses',fld:'otherOpEx',cls:'i1'},{l:'EBITDA',cmp:function(i){return d[i].ebitda;},bold:1,sub:1},{l:'EBITDA Margin %',cmp:function(i){return d[i].em;},fmt:pc,cls:'i1',clr:'#4361EE'},{l:'Depreciation &amp; Amort.',fld:'da',cls:'i1'},{l:'EBIT (Operating Profit)',cmp:function(i){return d[i].ebit;},bold:1,sub:1},{l:'EBIT Margin %',cmp:function(i){return d[i].opm;},fmt:pc,cls:'i1',clr:'#6366F1'},{l:'Other Income',fld:'otherIncome',cls:'i1'},{l:'Interest Expense',fld:'interestExp',cls:'i1',red:1},{l:'EBT (Profit Before Tax)',cmp:function(i){return d[i].ebt;},bold:1,sub:1},{l:'Tax Rate % (linked to Valuation)',fld:'taxRate',fmt:pc,cls:'i1',clr:'#F59E0B'},{l:'Income Tax',cmp:function(i){return d[i].tax;},cls:'i1',red:1},{l:'PAT (Net Profit)',cmp:function(i){return d[i].pat;},bold:1,tot:1,clr:'#7209B7'},{l:'PAT Margin %',cmp:function(i){return d[i].npm;},fmt:pc,cls:'i1',clr:'#7209B7'}];
+  var trs='';
+  rows.forEach(function(row,ri){var vals=row.cmp?YR.map(function(_,i){return row.cmp(i);}):pnl[row.fld];var ff=row.fmt||fm;var tc=row.tot?'tot':row.sub?'sub':ri%2===0?'stripe':'';var color=row.clr||(row.red?'#EF4444':row.bold?'#1E293B':'#475569');var cells='';YR.forEach(function(_,i){var ec=isEst(i)?(row.clr||'#F59E0B'):(row.clr||(row.red?'#EF4444':null));if(row.cmp)cells+='<td style="'+(ec?'color:'+ec+';':'')+(row.bold?'font-weight:700':'')+'">'+ff(vals[i])+'</td>';else cells+=pInp(row.fld,i,vals[i]);});trs+='<tr class="'+tc+'"><td class="left '+(row.cls||'')+'" style="color:'+color+';'+(row.bold?'font-weight:700':'')+'">'+row.l+'</td>'+cells+ycell(vals[3],vals[2])+'</tr>';});
+  return'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Profit &amp; Loss Statement</div></div><div class="sh-sub">'+co.currency+' &mdash; 3 Actuals + 2 Estimates</div></div>'+ctrl()+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yhdr()+'<th>YoY</th></tr></thead><tbody>'+trs+'</tbody></table></div><div class="tbl-note">&#128161; Unlock actuals above &nbsp;|&nbsp;<span style="color:#F59E0B">&#9632;</span> Gold=Estimates &nbsp;|&nbsp;<span style="color:#4361EE">&#9632;</span> Blue=Actuals (editable) &nbsp;|&nbsp; Tax Rate is linked to Valuation tab</div></div>';
+}
+
+function renderBS(d){
+  function mkr(lbl,fld,cmp,o){o=o||{};if(o.hdr)return'<tr class="hr'+(o.shr?' shr':'')+'"><td colspan="7">'+lbl+'</td></tr>';var vals=cmp?YR.map(function(_,i){return cmp(i);}):bs[fld];var tc=o.tot?'tot':o.sub?'sub':'stripe';var color=o.clr||(o.red?'#EF4444':o.bold?'#1E293B':'#475569');var cells='';YR.forEach(function(_,i){if(cmp)cells+='<td style="'+(o.bold?'font-weight:700;':'')+(o.clr?'color:'+o.clr:'')+'">'+ fm(vals[i])+'</td>';else cells+=bInp(fld,i,vals[i]);});return'<tr class="'+tc+'"><td class="left '+(o.cls||'')+'" style="color:'+color+';'+(o.bold?'font-weight:700':'')+'">'+lbl+'</td>'+cells+ycell(vals[3],vals[2])+'</tr>';}
+  var rows=mkr('A. ASSETS','','',{hdr:1})+mkr('Current Assets','','',{hdr:1,shr:1})+mkr('Cash &amp; Cash Equivalents','cash',null,{cls:'i1'})+mkr('Trade Receivables','receivables',null,{cls:'i1'})+mkr('Inventories','inventory',null,{cls:'i1'})+mkr('Other Current Assets','otherCA',null,{cls:'i1'})+mkr('Total Current Assets','',function(i){return d[i].tca;},{bold:1,sub:1})+mkr('Non-Current Assets','','',{hdr:1,shr:1})+mkr('Gross Block','grossBlock',null,{cls:'i1'})+mkr('Less: Accum. Depreciation','accDepr',null,{cls:'i1',red:1})+mkr('Net Block','',function(i){return d[i].net;},{bold:1,sub:1})+mkr('Other Non-Current Assets','otherNCA',null,{cls:'i1'})+mkr('TOTAL ASSETS','',function(i){return d[i].ta;},{bold:1,tot:1,clr:'#4361EE'})+mkr('B. LIABILITIES &amp; EQUITY','','',{hdr:1})+mkr('Current Liabilities','','',{hdr:1,shr:1})+mkr('Trade Payables','payables',null,{cls:'i1'})+mkr('Short-Term Borrowings','shortDebt',null,{cls:'i1'})+mkr('Other Current Liabilities','otherCL',null,{cls:'i1'})+mkr('Total Current Liabilities','',function(i){return d[i].tcl;},{bold:1,sub:1})+mkr('Non-Current Liabilities','','',{hdr:1,shr:1})+mkr('Long-Term Borrowings','longDebt',null,{cls:'i1'})+mkr('Other Non-Current Liab.','otherNCL',null,{cls:'i1'})+mkr("Shareholders' Equity",'','',{hdr:1,shr:1})+mkr('Share Capital','shareCapital',null,{cls:'i1'})+mkr('Reserves &amp; Surplus (Auto)','',function(i){return d[i].res;},{cls:'i1'})+mkr('Total Equity','',function(i){return d[i].eq;},{bold:1,sub:1})+mkr('TOTAL LIABILITIES &amp; EQUITY','',function(i){return d[i].tl;},{bold:1,tot:1,clr:'#7209B7'});
+  return'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Balance Sheet</div></div><div class="sh-sub">'+co.currency+' &mdash; 3 Actuals + 2 Estimates</div></div>'+ctrl()+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yhdr()+'<th>YoY</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="tbl-note">&#10086; Reserves &amp; Surplus = auto balancing figure.</div></div>';
+}
+
+function renderRatios(d){
+  var secs=[{l:'PROFITABILITY',c:'#4361EE',rows:[{l:'Revenue Growth %',vals:YR.map(function(_,i){return i>0?cg(d[i].rev,d[i-1].rev):null;}),fpc:1},{l:'Gross Profit Margin %',vals:d.map(function(x){return x.gpm;}),fpc:1,clr:'#06B6D4'},{l:'EBITDA Margin %',vals:d.map(function(x){return x.em;}),fpc:1,clr:'#4361EE'},{l:'PAT Margin %',vals:d.map(function(x){return x.npm;}),fpc:1,clr:'#7209B7'}]},{l:'RETURN RATIOS',c:'#7209B7',rows:[{l:'ROCE %',vals:d.map(function(x){return x.roce;}),fpc:1,clr:'#7209B7'},{l:'ROE %',vals:d.map(function(x){return x.roe;}),fpc:1,clr:'#6366F1'}]},{l:'LEVERAGE',c:'#F59E0B',rows:[{l:'Debt / Equity',vals:d.map(function(x){return x.de;}),dec:2},{l:'Total Debt (Cr)',vals:d.map(function(x){return x.td;})},{l:'Interest Coverage (x)',vals:d.map(function(x,i){return pnl.interestExp[i]?x.ebit/pnl.interestExp[i]:0;}),dec:2}]},{l:'LIQUIDITY',c:'#06B6D4',rows:[{l:'Current Ratio',vals:d.map(function(x){return x.cr;}),dec:2},{l:'Cash (Cr)',vals:d.map(function(_,i){return bs.cash[i];})}]},{l:'EFFICIENCY',c:'#10B981',rows:[{l:'Receivable Days',vals:d.map(function(x,i){return x.rev?(bs.receivables[i]/x.rev)*365:0;}),dec:0},{l:'Inventory Days',vals:d.map(function(x,i){return x.cogs?(bs.inventory[i]/x.cogs)*365:0;}),dec:0},{l:'Payable Days',vals:d.map(function(x,i){return x.cogs?(bs.payables[i]/x.cogs)*365:0;}),dec:0}]}];
+  var trs='';secs.forEach(function(sec){trs+='<tr class="rh"><td colspan="6" style="border-top:2px solid '+sec.c+';color:'+sec.c+'">'+sec.l+'</td></tr>';sec.rows.forEach(function(row,ri){var f=row.fpc?pc:function(v){return fm(v,row.dec!=null?row.dec:1);};var cells=YR.map(function(_,i){var v=row.vals[i],c=isEst(i)?(row.clr||'#F59E0B'):(row.clr||'inherit');return'<td style="color:'+c+'">'+(v===null||v===undefined?'&mdash;':f(v))+'</td>';}).join('');trs+='<tr class="'+(ri%2===0?'stripe':'')+'"><td class="left i1" style="color:'+(row.clr||'#475569')+'">'+row.l+'</td>'+cells+'</tr>';});});
+  return'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Financial Ratios &amp; KPIs</div></div><div class="sh-sub">All auto-computed</div></div><div class="tbl-wrap"><table><thead><tr><th class="left">Metric</th>'+YR.map(function(y,i){return'<th style="color:'+(isEst(i)?'#F59E0B':'#94A3B8')+'">'+y.replace('FY ','FY\'')+'</th>';}).join('')+'</tr></thead><tbody>'+trs+'</tbody></table></div></div>';
+}
+
+function renderVal(d,v){
+  var vc=v.up>=15?'STRONG BUY':v.up>=5?'BUY':v.up>=-5?'HOLD':v.up>=-15?'SELL':'STRONG SELL';
+  var vbg=v.up>=15?'#F0FDF4':v.up>=5?'#EFF6FF':v.up>=-5?'#FFFBEB':v.up>=-15?'#FEF3C7':'#FEF2F2';
+  var vc2=v.up>=0?'#10B981':'#EF4444';
+  var afs=[{l:'Current Market Price (Rs)',f:'currentPrice'},{l:'Shares Outstanding (Cr)',f:'sharesOutstanding'},{l:'WACC (%)',f:'wacc'},{l:'Terminal Growth Rate (%)',f:'terminalGrowthRate'},{l:'Risk-Free Rate (%)',f:'riskFreeRate'},{l:'Equity Risk Premium (%)',f:'equityRiskPremium'},{l:'Beta',f:'beta'},{l:'Cost of Debt (%)',f:'costOfDebt'},{l:'Tax Rate (%) [links to P&L]',f:'taxRate'},{l:'Target D/E',f:'targetDebtEquity'}];
+  var drows=[{l:'EBIT',vals:d.map(function(x){return x.ebit;})},{l:'Tax on EBIT ('+co.taxRate+'%)',vals:d.map(function(x){return x.ebit*v.tr;}),red:1},{l:'NOPAT',vals:d.map(function(x){return x.ebit*(1-v.tr);}),bold:1},{l:'Add: Depreciation',vals:pnl.da},{l:'EBITDA (proxy)',vals:d.map(function(x){return x.ebitda;}),sub:1},{l:'Free Cash Flow',vals:v.fcf,bold:1,clr:'#4361EE'},{l:'Discount Factor (WACC='+co.wacc+'%)',vals:v.dfRow,dec:4},{l:'PV of FCF',vals:v.pvRow,clr:'#10B981',bold:1}];
+  var dtrs=drows.map(function(row,ri){var tc=row.sub?'sub':ri%2===0?'stripe':'';var cells=YR.map(function(_,i){var val=row.vals[i];var c=isEst(i)?(row.clr||'#F59E0B'):(row.red?'#EF4444':(row.clr||'inherit'));return'<td style="color:'+c+';'+(row.bold?'font-weight:700':'')+'">'+( val===null||val===undefined?'&mdash;':fm(val,row.dec!=null?row.dec:1))+'</td>';}).join('');return'<tr class="'+tc+'"><td class="left" style="'+(row.bold?'font-weight:700;':'')+'color:'+(row.clr||(row.red?'#EF4444':'inherit'))+'">'+row.l+'</td>'+cells+'</tr>';}).join('');
+  var dout=[{l:'Sum of PV (FCFs)',val:'Rs '+fm(v.pvf)+' Cr',bg:'#EEF2FF',c:'#475569'},{l:'Terminal Value',val:'Rs '+fm(v.tv)+' Cr',bg:'#F0FDF4',c:'#475569'},{l:'PV of Terminal Value',val:'Rs '+fm(v.pvt)+' Cr',bg:'#FEF3C7',c:'#475569'},{l:'Enterprise Value',val:'Rs '+fm(v.ev)+' Cr',bg:'#EEF2FF',c:'#4361EE'},{l:'Less: Net Debt',val:'Rs '+fm(d[2].td)+' Cr',bg:'#FFF1F2',c:'#EF4444'},{l:'Equity Value',val:'Rs '+fm(v.eq)+' Cr',bg:'#F0FDF4',c:'#10B981'},{l:'Intrinsic Value/Share',val:'Rs '+fm(v.tp,0),bg:'#EEF2FF',c:'#4361EE'},{l:'Upside / Downside',val:(v.up>=0?'&#9650;':'&#9660;')+' '+Math.abs(v.up).toFixed(1)+'%',bg:vbg,c:vc2}];
+  var mrows=[{m:'Revenue',val:d[2].rev,x:v.er},{m:'EBITDA',val:d[2].ebitda,x:v.ee},{m:'PAT',val:d[2].pat,x:v.pe},{m:'Book Value',val:d[2].eq,x:v.pb}];
+  return'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Valuation Assumptions</div></div><div class="sh-sub">Edit any field &mdash; DCF recalculates instantly. Tax Rate links to P&amp;L.</div></div><div class="ag">'+afs.map(function(x){return'<div class="af"><label>'+x.l+'</label><input type="number" value="'+co[x.f]+'" onchange="sC(\''+x.f+'\',+this.value)"></div>';}).join('')+'</div></div>'
+    +'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">DCF &mdash; Free Cash Flow Model</div></div><div class="sh-sub">'+YR[3]+' &amp; '+YR[4]+'</div></div><div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+YR.map(function(y,i){return'<th style="color:'+(isEst(i)?'#F59E0B':'#94A3B8')+'">'+y.replace('FY ','FY\'')+'</th>';}).join('')+'</tr></thead><tbody>'+dtrs+'</tbody></table></div><div class="do">'+dout.map(function(b){return'<div class="db" style="background:'+b.bg+'"><div class="dl">'+b.l+'</div><div class="dv" style="color:'+b.c+'">'+b.val+'</div></div>';}).join('')+'</div></div>'
+    +'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Trading Multiples</div></div><div class="sh-sub">Based on '+YR[2]+' Actuals</div></div><div class="mg"><div class="tbl-wrap"><table><thead><tr><th class="left">Metric</th><th>'+YR[2]+'</th><th style="color:#4361EE">Multiple</th></tr></thead><tbody>'+mrows.map(function(r,i){return'<tr class="'+(i%2===0?'stripe':'')+'"><td class="left">'+r.m+'</td><td>Rs '+fm(r.val)+' Cr</td><td style="color:#4361EE;font-weight:700">'+fm(r.x)+'x</td></tr>';}).join('')+'</tbody></table></div><div class="vbox" style="background:'+vbg+';border:2px solid '+vc2+'"><div style="font-size:12px;font-weight:600;color:#94A3B8;margin-bottom:6px">VALUATION VERDICT</div><div style="font-size:36px;font-weight:900;color:'+vc2+'">'+vc+'</div><div style="font-size:14px;line-height:1.8;margin-top:10px;color:#475569">CMP Rs '+co.currentPrice+' | Target Rs '+fm(v.tp,0)+'<br><span style="color:'+vc2+';font-weight:700">'+(v.up>=0?'&#9650;':'&#9660;')+' '+Math.abs(v.up).toFixed(1)+'% potential '+(v.up>=0?'upside':'downside')+'</span></div></div></div></div>';
+}
+
+function renderHelp(){
+  var hcs=[{title:'&#9998; Editing Actuals',c:'#4361EE',bg:'#EFF6FF',steps:['Go to P&amp;L or Balance Sheet tab','Click Actuals Locked to unlock','Click any cell and type','All rows update instantly']},{title:'&#128197; Changing Years',c:'#6366F1',bg:'#EEF2FF',steps:['Use the FISCAL YEARS bar at top','Type any starting year','All 5 columns update automatically','Gold=Estimates, Blue=Actuals']},{title:'&#128229; CSV Import',c:'#F59E0B',bg:'#FFF7ED',steps:['Click Import Data button','Choose P&amp;L or BS Import tab','Download template and fill data','Upload then Parse then Apply']},{title:'&#128142; Valuation Tab',c:'#10B981',bg:'#F0FDF4',steps:['Edit any assumption field','Tax Rate is linked to P&amp;L','WACC and growth rate affect target price','All multiples auto-update']}];
+  return'<div class="card"><div class="sh"><div class="sh-row"><div class="sh-bar"></div><div class="sh-title">Company Information &amp; Help</div></div></div><div class="sg">'+[{l:'Company Name',f:'name'},{l:'Sector',f:'sector'},{l:'Currency',f:'currency'},{l:'Fiscal Year End',f:'reportingDate'}].map(function(x){return'<div class="sf"><label>'+x.l+'</label><input type="text" value="'+co[x.f]+'" onchange="sC(\''+x.f+'\',this.value)"></div>';}).join('')+'</div><div class="hg">'+hcs.map(function(c){return'<div class="hc" style="background:'+c.bg+';border:1px solid '+c.c+'40"><div class="hct" style="color:'+c.c+'">'+c.title+'</div><ol>'+c.steps.map(function(s){return'<li>'+s+'</li>';}).join('')+'</ol></div>';}).join('')+'</div><div style="margin-top:22px;padding:18px;background:linear-gradient(135deg,#EEF2FF,#F5F3FF);border-radius:12px;border:1px solid #C7D2FE;display:flex;gap:20px;align-items:center;flex-wrap:wrap"><div style="font-size:18px;font-weight:900;background:linear-gradient(135deg,#4361EE,#7209B7);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Vipin ValuMetrics</div><span style="color:#4361EE;font-weight:700">Tel: 8160203197</span><span id="help-email" style="color:#7209B7;font-weight:700">audit.vipin@gmail.com</span></div></div>';
+}
+
+function render(){
+  var d=derive(),v=calcVal(d);
+  document.getElementById('hdr-co').textContent=co.name;
+  var h='';
+  if(ct==='overview')h=renderOv(d,v);
+  else if(ct==='pnl')h=renderPnL(d);
+  else if(ct==='bs')h=renderBS(d);
+  else if(ct==='ratios')h=renderRatios(d);
+  else if(ct==='valuation')h=renderVal(d,v);
+  else if(ct==='help')h=renderHelp();
+  document.getElementById('content').innerHTML=h;
+}
+
+function go(id,el){ct=id;document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});el.classList.add('active');render();}
+function togEA(){ea=!ea;render();}
+function sP(f,i,v){pnl[f][i]=v;if(f==='taxRate'){var s=0;pnl.taxRate.forEach(function(x){s+=x;});co.taxRate=+(s/5).toFixed(2);}render();}
+function sB(f,i,v){bs[f][i]=v;render();}
+function sC(f,v){co[f]=v;if(f==='taxRate')pnl.taxRate=[v,v,v,v,v];render();}
+function openModal(){document.getElementById('modal-ov').classList.add('show');}
+function closeModal(){document.getElementById('modal-ov').classList.remove('show');pParsed=null;bParsed=null;['pnl-apply','bs-apply'].forEach(function(id){document.getElementById(id).style.display='none';});['pnl-msg','bs-msg'].forEach(function(id){document.getElementById(id).className='msg';});}
+function mTab(id,el){document.querySelectorAll('.mt-btn').forEach(function(b){b.classList.remove('active');});el.classList.add('active');['guide','pnl','bs'].forEach(function(p){document.getElementById('mp-'+p).className='mp'+(p===id?' show':'');});}
+function loadF(e,ta){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){document.getElementById(ta).value=ev.target.result;};r.readAsText(f);}
+var PMAP={revenue:'Revenue',cogs:'COGS',otherOpEx:'OtherOpEx',da:'DA',interestExp:'InterestExp',otherIncome:'OtherIncome',taxRate:'TaxRate'};
+var BMAP={cash:'Cash',receivables:'Receivables',inventory:'Inventory',otherCA:'OtherCA',grossBlock:'GrossBlock',accDepr:'AccDepr',otherNCA:'OtherNCA',payables:'Payables',shortDebt:'ShortDebt',otherCL:'OtherCL',longDebt:'LongDebt',otherNCL:'OtherNCL',shareCapital:'ShareCapital'};
+function parseRaw(text,map){var lines=text.trim().split('\n').map(function(l){return l.split(',').map(function(c){return c.trim().replace(/"/g,'');});});if(!lines[0]||lines[0][0].toLowerCase()!=='field')throw new Error("First column must be 'Field'");var out={};Object.keys(map).forEach(function(k){var n=map[k];lines.forEach(function(l){if(l[0]===n)out[k]=[0,1,2,3,4].map(function(j){return parseFloat(l[j+1])||0;});});});if(!Object.keys(out).length)throw new Error('No matching fields. Download template.');return out;}
+function showMsg(id,ok,txt){var el=document.getElementById(id);el.className='msg show '+(ok?'ok':'err');el.innerHTML=txt;}
+function doParse(type){var ta=type==='pnl'?'pnl-ta':'bs-ta',msg=type==='pnl'?'pnl-msg':'bs-msg',btn=type==='pnl'?'pnl-apply':'bs-apply',map=type==='pnl'?PMAP:BMAP;try{var p=parseRaw(document.getElementById(ta).value,map);if(type==='pnl')pParsed=p;else bParsed=p;showMsg(msg,true,'Parsed '+Object.keys(p).length+' fields. Click Apply.');document.getElementById(btn).style.display='inline-block';}catch(e){showMsg(msg,false,e.message);document.getElementById(btn).style.display='none';if(type==='pnl')pParsed=null;else bParsed=null;}}
+function doApply(type){if(type==='pnl'&&pParsed)Object.keys(pParsed).forEach(function(k){pnl[k]=pParsed[k];});else if(type==='bs'&&bParsed)Object.keys(bParsed).forEach(function(k){bs[k]=bParsed[k];});closeModal();render();}
+function dlTpl(type){var p="Field,FY2022,FY2023,FY2024,FY2025E,FY2026E\nRevenue,850,980,1120,1290,1480\nCOGS,510,578,650,742,844\nOtherOpEx,130,148,168,190,215\nDA,42,48,55,63,72\nInterestExp,28,30,32,34,36\nOtherIncome,8,10,12,14,16\nTaxRate,25,25,25,25,25";var b="Field,FY2022,FY2023,FY2024,FY2025E,FY2026E\nCash,80,95,120,150,185\nReceivables,130,155,175,200,230\nInventory,145,165,188,215,245\nOtherCA,30,35,40,45,50\nGrossBlock,620,700,790,890,1000\nAccDepr,180,228,283,346,418\nOtherNCA,45,50,55,60,65\nPayables,90,105,120,138,158\nShortDebt,60,65,70,75,80\nOtherCL,40,45,50,55,60\nLongDebt,200,190,180,170,160\nOtherNCL,25,28,30,32,35\nShareCapital,100,100,100,100,100";var a=document.createElement('a');a.href='data:text/csv,'+encodeURIComponent(type==='pnl'?p:b);a.download=type+'_template.csv';a.click();}
+function printReport(){
+  // Render all sections into a full report page and print it
+  var d=derive(), v=calcVal(d);
+  var ts = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+
+  var reportHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"/>'
+    +'<title>ValuMetrics Report - '+co.name+'</title>'
+    +'<style>'
+    +'*{box-sizing:border-box;margin:0;padding:0}'
+    +'body{font-family:\'Segoe UI\',Arial,sans-serif;color:#1E293B;background:#fff;padding:24px;font-size:11px}'
+    +'.rpt-hdr{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:12px;border-bottom:3px solid #4361EE;margin-bottom:18px}'
+    +'.rpt-logo{font-size:20px;font-weight:900;color:#4361EE}'
+    +'.rpt-co{font-size:15px;font-weight:800;margin-top:3px}'
+    +'.rpt-sub{font-size:10px;color:#94A3B8;margin-top:2px}'
+    +'.rpt-right{text-align:right;font-size:10px;color:#475569}'
+    +'.sec{margin-bottom:20px;break-inside:avoid}'
+    +'.sec-title{font-size:13px;font-weight:800;color:#1E293B;padding:6px 10px;background:#EEF2FF;border-left:4px solid #4361EE;margin-bottom:8px}'
+    +'.kpi-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}'
+    +'.kpi{border:1px solid #E2E8F8;border-radius:8px;padding:10px 14px;flex:1 1 120px;min-width:110px}'
+    +'.kpi-lbl{color:#94A3B8;font-size:9px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}'
+    +'.kpi-val{font-size:16px;font-weight:800}'
+    +'.kpi-sub{color:#94A3B8;font-size:9px;margin-top:2px}'
+    +'table{width:100%;border-collapse:collapse;font-size:10px}'
+    +'th{padding:6px 8px;text-align:right;background:#F8FAFF;border-bottom:2px solid #E2E8F8;color:#94A3B8;font-size:9px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}'
+    +'th.L{text-align:left}'
+    +'td{padding:4px 8px;text-align:right;border-bottom:1px solid #F1F5F9;font-family:\'Courier New\',monospace}'
+    +'td.L{text-align:left;font-family:\'Segoe UI\',Arial,sans-serif}'
+    +'td.i1{padding-left:22px}'
+    +'tr.tot td{background:#EEF2FF;font-weight:700}'
+    +'tr.sub td{background:#F8FAFF}'
+    +'tr.stripe td{background:#FAFBFF}'
+    +'tr.hr td{background:#EEF2FF;font-weight:700;font-size:9px;letter-spacing:.1em;text-transform:uppercase;text-align:left;font-family:\'Segoe UI\',Arial,sans-serif}'
+    +'tr.shr td{background:#F8FAFF;font-size:9px;color:#94A3B8;font-family:\'Segoe UI\',Arial,sans-serif}'
+    +'tr.rh td{font-weight:800;font-size:9px;letter-spacing:.1em;text-transform:uppercase;background:#F8FAFF;text-align:left}'
+    +'.do{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}'
+    +'.db{border-radius:8px;padding:10px 12px;border:1px solid #E2E8F8}'
+    +'.dl{color:#94A3B8;font-size:9px;text-transform:uppercase;margin-bottom:2px}'
+    +'.dv{font-size:14px;font-weight:800}'
+    +'.mg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}'
+    +'.verdict{border-radius:10px;padding:16px;display:flex;flex-direction:column;justify-content:center}'
+    +'.ag{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}'
+    +'.af{background:#F8FAFF;border-radius:6px;padding:8px 10px}'
+    +'.af-lbl{color:#94A3B8;font-size:9px;margin-bottom:2px}'
+    +'.af-val{font-size:12px;font-weight:700;color:#1E293B}'
+    +'@media print{body{padding:16px}}'
+    +'</style></head><body>';
+
+  // ── HEADER ─────────────────────────────────────────────────────────────────
+  var uc = v.up>=0?'#10B981':'#EF4444';
+  reportHtml += '<div class="rpt-hdr">'
+    +'<div><div class="rpt-logo">Vipin&#39;s ValuMetrics&#8482;</div>'
+    +'<div class="rpt-co">'+co.name+'</div>'
+    +'<div class="rpt-sub">'+co.sector+' &nbsp;|&nbsp; '+co.currency+' &nbsp;|&nbsp; FY End: '+co.reportingDate+'</div></div>'
+    +'<div class="rpt-right"><div style="font-size:13px;font-weight:800;color:#4361EE">Valuation Report</div>'
+    +'<div>Tel: 8160203197</div><div>audit.vipin@gmail.com</div>'
+    +'<div style="margin-top:3px;color:#94A3B8">Generated: '+ts+'</div></div>'
+    +'</div>';
+
+  // ── KPI SUMMARY ────────────────────────────────────────────────────────────
+  var kpis=[
+    {l:'Market Cap',     val:'Rs '+fm(v.mc)+' Cr',      sub:'CMP Rs '+co.currentPrice, c:'#4361EE'},
+    {l:'Enterprise Value',val:'Rs '+fm(v.ev)+' Cr',      sub:'Mkt Cap + Net Debt',      c:'#7209B7'},
+    {l:'DCF Target Price',val:'Rs '+fm(v.tp,0),           sub:(v.up>=0?'UP':'DN')+' '+Math.abs(v.up).toFixed(1)+'% vs CMP', c:uc},
+    {l:'EV / EBITDA',    val:fm(v.ee)+'x',               sub:YR[2],                     c:'#06B6D4'},
+    {l:'P / E',          val:fm(v.pe)+'x',               sub:YR[2],                     c:'#6366F1'},
+    {l:'P / BV',         val:fm(v.pb)+'x',               sub:YR[2],                     c:'#EC4899'},
+  ];
+  reportHtml += '<div class="kpi-row">'+kpis.map(function(k){
+    return'<div class="kpi" style="border-top:3px solid '+k.c+'"><div class="kpi-lbl">'+k.l+'</div><div class="kpi-val" style="color:'+k.c+'">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';
+  }).join('')+'</div>';
+
+  // ── P&L ────────────────────────────────────────────────────────────────────
+  reportHtml += '<div class="sec"><div class="sec-title">Profit &amp; Loss Statement &nbsp;|&nbsp; '+co.currency+'</div>';
+  var prows=[
+    {l:'Net Revenue / Sales',  vals:pnl.revenue, bold:1},
+    {l:'Cost of Goods Sold',   vals:pnl.cogs,    cls:'i1'},
+    {l:'Gross Profit',         vals:d.map(function(x){return x.gp;}),   bold:1,sub:1},
+    {l:'Other Operating Exp.', vals:pnl.otherOpEx, cls:'i1'},
+    {l:'EBITDA',               vals:d.map(function(x){return x.ebitda;}),bold:1,sub:1,clr:'#4361EE'},
+    {l:'EBITDA Margin %',      vals:d.map(function(x){return x.em.toFixed(1)+'%';}), cls:'i1',clr:'#4361EE',str:1},
+    {l:'Depreciation',         vals:pnl.da, cls:'i1'},
+    {l:'EBIT',                 vals:d.map(function(x){return x.ebit;}),  bold:1,sub:1},
+    {l:'Interest Expense',     vals:pnl.interestExp, cls:'i1', red:1},
+    {l:'Other Income',         vals:pnl.otherIncome, cls:'i1'},
+    {l:'EBT',                  vals:d.map(function(x){return x.ebt;}),   bold:1,sub:1},
+    {l:'Tax Rate %',           vals:pnl.taxRate.map(function(x){return x+'%';}), cls:'i1',str:1},
+    {l:'Income Tax',           vals:d.map(function(x){return x.tax;}),   cls:'i1',red:1},
+    {l:'PAT (Net Profit)',     vals:d.map(function(x){return x.pat;}),   bold:1,tot:1,clr:'#7209B7'},
+    {l:'PAT Margin %',         vals:d.map(function(x){return x.npm.toFixed(1)+'%';}), cls:'i1',clr:'#7209B7',str:1},
+  ];
+  var yhdrs='<th class="L">Particulars</th>'+YR.map(function(y,i){return'<th style="color:'+(EST.indexOf(i)>=0?'#F59E0B':'#94A3B8')+'">'+y.replace('FY ','FY\'')+'</th>';}).join('');
+  reportHtml += '<table><thead><tr>'+yhdrs+'</tr></thead><tbody>';
+  prows.forEach(function(row,ri){
+    var tc=row.tot?'tot':row.sub?'sub':ri%2===0?'stripe':'';
+    var cells=row.vals.map(function(v,i){
+      var c=EST.indexOf(i)>=0?(row.clr||'#F59E0B'):(row.clr||(row.red?'#EF4444':''));
+      return'<td style="'+(c?'color:'+c+';':'')+(row.bold?'font-weight:700':'')+'">'+( row.str?v:fm(v))+'</td>';
+    }).join('');
+    reportHtml+='<tr class="'+tc+'"><td class="L '+(row.cls||'')+'" style="'+(row.bold?'font-weight:700;':'')+'color:'+(row.clr||(row.red?'#EF4444':'inherit'))+'">'+row.l+'</td>'+cells+'</tr>';
+  });
+  reportHtml += '</tbody></table></div>';
+
+  // ── BALANCE SHEET ──────────────────────────────────────────────────────────
+  reportHtml += '<div class="sec"><div class="sec-title">Balance Sheet &nbsp;|&nbsp; '+co.currency+'</div>';
+  function bsRow(lbl,vals,o){o=o||{};if(o.hdr)return'<tr class="hr'+(o.shr?' shr':'')+'"><td colspan="6">'+lbl+'</td></tr>';var tc=o.tot?'tot':o.sub?'sub':'stripe';var cl=o.clr||(o.red?'#EF4444':o.bold?'#1E293B':'#475569');var cells=vals.map(function(v,i){return'<td style="'+(o.bold?'font-weight:700;':'')+(o.clr?'color:'+o.clr:'')+( EST.indexOf(i)>=0&&!o.clr?'color:#F59E0B':'')+'">'+fm(v)+'</td>';}).join('');return'<tr class="'+tc+'"><td class="L '+(o.cls||'')+'" style="color:'+cl+';'+(o.bold?'font-weight:700':'')+'">'+lbl+'</td>'+cells+'</tr>';}
+  reportHtml += '<table><thead><tr>'+yhdrs+'</tr></thead><tbody>'
+    +bsRow('A. ASSETS','',{hdr:1})
+    +bsRow('Cash',bs.cash,{cls:'i1'})+bsRow('Receivables',bs.receivables,{cls:'i1'})+bsRow('Inventory',bs.inventory,{cls:'i1'})+bsRow('Other CA',bs.otherCA,{cls:'i1'})
+    +bsRow('Total Current Assets',d.map(function(x){return x.tca;}),{bold:1,sub:1})
+    +bsRow('Net Block',d.map(function(x){return x.net;}),{bold:1,sub:1})+bsRow('Other NCA',bs.otherNCA,{cls:'i1'})
+    +bsRow('TOTAL ASSETS',d.map(function(x){return x.ta;}),{bold:1,tot:1,clr:'#4361EE'})
+    +bsRow('B. LIABILITIES & EQUITY','',{hdr:1})
+    +bsRow('Payables',bs.payables,{cls:'i1'})+bsRow('Short-Term Debt',bs.shortDebt,{cls:'i1'})+bsRow('Other CL',bs.otherCL,{cls:'i1'})
+    +bsRow('Total Current Liabilities',d.map(function(x){return x.tcl;}),{bold:1,sub:1})
+    +bsRow('Long-Term Debt',bs.longDebt,{cls:'i1'})+bsRow('Other NCL',bs.otherNCL,{cls:'i1'})
+    +bsRow('Share Capital',bs.shareCapital,{cls:'i1'})+bsRow('Reserves & Surplus (Auto)',d.map(function(x){return x.res;}),{cls:'i1'})
+    +bsRow('Total Equity',d.map(function(x){return x.eq;}),{bold:1,sub:1})
+    +bsRow('TOTAL LIABILITIES & EQUITY',d.map(function(x){return x.tl;}),{bold:1,tot:1,clr:'#7209B7'})
+    +'</tbody></table></div>';
+
+  // ── RATIOS ─────────────────────────────────────────────────────────────────
+  reportHtml += '<div class="sec"><div class="sec-title">Financial Ratios &amp; KPIs &nbsp;|&nbsp; All Auto-Computed</div>';
+  var rsecs=[
+    {l:'PROFITABILITY',c:'#4361EE',rows:[
+      {l:'Revenue Growth %',   vals:YR.map(function(_,i){var v=i>0?((d[i].rev-d[i-1].rev)/Math.abs(d[i-1].rev)*100):null;return v===null?'—':v.toFixed(1)+'%';},true)},
+      {l:'EBITDA Margin %',    vals:d.map(function(x){return x.em.toFixed(1)+'%';})},
+      {l:'PAT Margin %',       vals:d.map(function(x){return x.npm.toFixed(1)+'%';})},
+    ]},
+    {l:'RETURNS',c:'#7209B7',rows:[
+      {l:'ROCE %',vals:d.map(function(x){return x.roce.toFixed(1)+'%';})},
+      {l:'ROE %', vals:d.map(function(x){return x.roe.toFixed(1)+'%';})},
+    ]},
+    {l:'LEVERAGE',c:'#F59E0B',rows:[
+      {l:'Debt/Equity',vals:d.map(function(x){return x.de.toFixed(2);})},
+      {l:'Interest Coverage',vals:d.map(function(x,i){return pnl.interestExp[i]?(x.ebit/pnl.interestExp[i]).toFixed(2):'—';})},
+    ]},
+    {l:'LIQUIDITY',c:'#06B6D4',rows:[
+      {l:'Current Ratio',vals:d.map(function(x){return x.cr.toFixed(2);})},
+    ]},
+  ];
+  reportHtml += '<table><thead><tr><th class="L">Metric</th>'+YR.map(function(y,i){return'<th style="color:'+(EST.indexOf(i)>=0?'#F59E0B':'#94A3B8')+'">'+y.replace('FY ','FY\'')+'</th>';}).join('')+'</tr></thead><tbody>';
+  rsecs.forEach(function(sec){
+    reportHtml += '<tr class="rh"><td colspan="6" style="color:'+sec.c+';border-top:2px solid '+sec.c+'">'+sec.l+'</td></tr>';
+    sec.rows.forEach(function(row,ri){
+      var cells=row.vals.map(function(val,i){return'<td style="color:'+(EST.indexOf(i)>=0?'#F59E0B':'inherit')+'">'+val+'</td>';}).join('');
+      reportHtml += '<tr class="'+(ri%2===0?'stripe':'')+'"><td class="L i1">'+row.l+'</td>'+cells+'</tr>';
+    });
+  });
+  reportHtml += '</tbody></table></div>';
+
+  // ── VALUATION ASSUMPTIONS ──────────────────────────────────────────────────
+  reportHtml += '<div class="sec"><div class="sec-title">Valuation Assumptions</div><div class="ag">'
+    +[{l:'WACC',v:co.wacc+'%'},{l:'Terminal Growth',v:co.terminalGrowthRate+'%'},{l:'Tax Rate',v:co.taxRate+'%'},{l:'Beta',v:co.beta},{l:'Risk-Free Rate',v:co.riskFreeRate+'%'},{l:'Equity Risk Premium',v:co.equityRiskPremium+'%'},{l:'Cost of Debt',v:co.costOfDebt+'%'},{l:'CMP',v:'Rs '+co.currentPrice},{l:'Shares (Cr)',v:co.sharesOutstanding},{l:'Target D/E',v:co.targetDebtEquity}].map(function(x){
+      return'<div class="af"><div class="af-lbl">'+x.l+'</div><div class="af-val">'+x.v+'</div></div>';
+    }).join('')+'</div></div>';
+
+  // ── DCF TABLE ──────────────────────────────────────────────────────────────
+  reportHtml += '<div class="sec"><div class="sec-title">DCF &mdash; Free Cash Flow Model &nbsp;|&nbsp; '+YR[3]+' &amp; '+YR[4]+'</div>';
+  var dcfRows=[
+    {l:'EBIT',           vals:d.map(function(x){return fm(x.ebit);})},
+    {l:'Tax on EBIT',    vals:d.map(function(x){return fm(x.ebit*v.tr);}),red:1},
+    {l:'NOPAT',          vals:d.map(function(x){return fm(x.ebit*(1-v.tr));}),bold:1},
+    {l:'Add: Depreciation',vals:pnl.da.map(function(x){return fm(x);})},
+    {l:'Free Cash Flow', vals:v.fcf.map(function(x){return fm(x);}),bold:1,clr:'#4361EE'},
+    {l:'Discount Factor',vals:v.dfRow.map(function(x){return x===null?'—':x.toFixed(4);})},
+    {l:'PV of FCF',      vals:v.pvRow.map(function(x){return x===null?'—':fm(x);}),bold:1,clr:'#10B981'},
+  ];
+  reportHtml += '<table><thead><tr><th class="L">Particulars</th>'+YR.map(function(y,i){return'<th style="color:'+(EST.indexOf(i)>=0?'#F59E0B':'#94A3B8')+'">'+y.replace('FY ','FY\'')+'</th>';}).join('')+'</tr></thead><tbody>';
+  dcfRows.forEach(function(row,ri){
+    var cells=row.vals.map(function(val,i){var c=EST.indexOf(i)>=0?(row.clr||'#F59E0B'):(row.red?'#EF4444':(row.clr||''));return'<td style="'+(c?'color:'+c+';':'')+(row.bold?'font-weight:700':'')+'">'+val+'</td>';}).join('');
+    reportHtml+='<tr class="'+(ri%2===0?'stripe':'')+'"><td class="L" style="'+(row.bold?'font-weight:700;':'')+'color:'+(row.clr||(row.red?'#EF4444':'inherit'))+'">'+row.l+'</td>'+cells+'</tr>';
+  });
+  reportHtml += '</tbody></table>';
+
+  // DCF Summary boxes
+  var vc=v.up>=15?'STRONG BUY':v.up>=5?'BUY':v.up>=-5?'HOLD':v.up>=-15?'SELL':'STRONG SELL';
+  var vbg=v.up>=15?'#F0FDF4':v.up>=5?'#EFF6FF':v.up>=-5?'#FFFBEB':v.up>=-15?'#FEF3C7':'#FEF2F2';
+  reportHtml += '<div class="do">'
+    +'<div class="db" style="background:#EEF2FF"><div class="dl">PV of FCFs</div><div class="dv" style="color:#4361EE">Rs '+fm(v.pvf)+' Cr</div></div>'
+    +'<div class="db" style="background:#F0FDF4"><div class="dl">Terminal Value</div><div class="dv" style="color:#10B981">Rs '+fm(v.tv)+' Cr</div></div>'
+    +'<div class="db" style="background:#EEF2FF"><div class="dl">Enterprise Value</div><div class="dv" style="color:#4361EE">Rs '+fm(v.ev)+' Cr</div></div>'
+    +'<div class="db" style="background:#F0FDF4"><div class="dl">Equity Value</div><div class="dv" style="color:#10B981">Rs '+fm(v.eq)+' Cr</div></div>'
+    +'<div class="db" style="background:#EEF2FF"><div class="dl">Intrinsic Value/Share</div><div class="dv" style="color:#4361EE">Rs '+fm(v.tp,0)+'</div></div>'
+    +'<div class="db" style="background:'+vbg+'"><div class="dl">Upside / Downside</div><div class="dv" style="color:'+uc+'">'+(v.up>=0?'+':'')+v.up.toFixed(1)+'%</div></div>'
+    +'<div class="db" style="background:'+vbg+';grid-column:span 2"><div class="dl">Valuation Verdict</div><div class="dv" style="color:'+uc+';font-size:20px">'+vc+'</div><div style="font-size:10px;color:#475569;margin-top:2px">CMP Rs '+co.currentPrice+' &nbsp;|&nbsp; Target Rs '+fm(v.tp,0)+'</div></div>'
+    +'</div></div>';
+
+  // ── TRADING MULTIPLES ──────────────────────────────────────────────────────
+  reportHtml += '<div class="sec"><div class="sec-title">Trading Multiples &nbsp;|&nbsp; Based on '+YR[2]+'</div><div class="mg">'
+    +'<table><thead><tr><th class="L">Metric</th><th>'+YR[2]+' Value</th><th style="color:#4361EE">Multiple</th></tr></thead><tbody>'
+    +[{m:'Revenue',val:d[2].rev,x:v.er},{m:'EBITDA',val:d[2].ebitda,x:v.ee},{m:'PAT',val:d[2].pat,x:v.pe},{m:'Book Value',val:d[2].eq,x:v.pb}].map(function(r,i){
+      return'<tr class="'+(i%2===0?'stripe':'')+'"><td class="L">'+r.m+'</td><td>Rs '+fm(r.val)+' Cr</td><td style="color:#4361EE;font-weight:700">'+fm(r.x)+'x</td></tr>';
+    }).join('')+'</tbody></table>'
+    +'<div class="verdict" style="background:'+vbg+';border:2px solid '+uc+'">'
+    +'<div style="font-size:10px;font-weight:700;color:#94A3B8;margin-bottom:4px">OVERALL VERDICT</div>'
+    +'<div style="font-size:28px;font-weight:900;color:'+uc+'">'+vc+'</div>'
+    +'<div style="font-size:11px;margin-top:6px;color:#475569">CMP Rs '+co.currentPrice+' &nbsp;|&nbsp; Target Rs '+fm(v.tp,0)+'<br><b style="color:'+uc+'">'+(v.up>=0?'+':'')+v.up.toFixed(1)+'% potential '+(v.up>=0?'upside':'downside')+'</b></div>'
+    +'</div></div></div>';
+
+  // ── FOOTER ─────────────────────────────────────────────────────────────────
+  reportHtml += '<div style="margin-top:24px;padding-top:10px;border-top:1px solid #E2E8F8;display:flex;justify-content:space-between;font-size:9px;color:#94A3B8">'
+    +'<span>Vipin\'s ValuMetrics&#8482; &nbsp;|&nbsp; Tel: 8160203197 &nbsp;|&nbsp; audit.vipin@gmail.com</span>'
+    +'<span>Generated: '+ts+' &nbsp;|&nbsp; For internal use only. Not investment advice.</span>'
+    +'</div>';
+
+  reportHtml += '</body></html>';
+
+  // Write into hidden iframe and print (avoids popup blocker)
+  var frame = document.getElementById('print-frame');
+  frame.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:none;z-index:99999;display:block';
+  var fdoc = frame.contentDocument || frame.contentWindow.document;
+  fdoc.open(); fdoc.write(reportHtml); fdoc.close();
+  frame.contentWindow.focus();
+  setTimeout(function(){
+    frame.contentWindow.print();
+    setTimeout(function(){ frame.style.cssText='display:none;position:fixed;inset:0;width:0;height:0;border:none'; }, 1000);
+  }, 500);
+}
+
+updateYears();
+render();
+
+</script>
+<iframe id="print-frame" style="display:none;position:fixed;inset:0;width:0;height:0;border:none"></iframe>
+</body>
+</html>
