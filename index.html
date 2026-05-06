@@ -123,7 +123,7 @@ tr.rh td{font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppe
   <div id="hdr-right">
     <button class="hdr-btn" onclick="openModal()">&#128229; Import Data</button>
     <button class="hdr-btn" onclick="printReport()" style="background:linear-gradient(135deg,#10B981,#06B6D4)">&#128438; Print / Export PDF</button>
-    <div><div style="color:#94A3B8;font-size:10px;text-align:right;letter-spacing:.1em">COMPANY</div><div id="hdr-co" style="font-weight:700;font-size:14px;text-align:right">Vipin Corporation Ltd.</div></div>
+    <div><div style="color:#94A3B8;font-size:10px;text-align:right;letter-spacing:.1em">COMPANY</div><div id="hdr-co" style="font-weight:700;font-size:14px;text-align:right">ABC Corporation Ltd.</div></div>
     <div class="badge">3A + 2E</div>
   </div>
 </div>
@@ -230,7 +230,7 @@ function updateYears(){
 function setStartYear(y){var v=parseInt(y);if(v>1900&&v<2200)startYear=v;updateYears();render();}
 
 var ea=false,ct='overview',pParsed=null,bParsed=null;
-var co={name:'Vipin Corporation Ltd.',sector:'Manufacturing',currency:'INR (\u20B9 Cr)',reportingDate:'March',
+var co={name:'ABC Corporation Ltd.',sector:'Manufacturing',currency:'INR (\u20B9 Cr)',reportingDate:'March',
   currentPrice:450,sharesOutstanding:10,beta:1.2,riskFreeRate:7,equityRiskPremium:5.5,
   terminalGrowthRate:3.5,wacc:12,costOfDebt:9,taxRate:25,targetDebtEquity:0.3};
 var pnl={revenue:[850,980,1120,1290,1480],cogs:[510,578,650,742,844],otherOpEx:[130,148,168,190,215],
