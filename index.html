@@ -817,6 +817,16 @@ function approachCard(){
     +'<tr class="tot"><td class="left" style="font-weight:800;color:#4361EE">Headline target</td><td style="font-weight:800;color:#4361EE">&#8377;'+fm(h.tp,0)+'</td><td style="font-weight:800;color:'+upClr(h.up)+'">'+sgn(h.up)+'</td><td>'+(blend?'100%':'')+'</td><td></td></tr></tbody></table></div>'
     +'<div class="ctrl-row" style="margin-top:12px;margin-bottom:0"><button class="ctrl-btn" onclick="openSetup()" style="background:#EEF2FF;border-color:#4361EE;color:#4361EE">&#127919; Change valuation approach</button></div>');
 }
+/* PDF cover panel: profile, headline rule and each method's value & weight */
+function coverApproach(h){
+  var pf=PROFILES.filter(function(x){return x.k===valSetup.profile;})[0];
+  var who=pf?pf.l.replace(/^&#\d+;\s*/,''):'Custom selection';
+  var rule=h.mode==='blend'?'Weighted blend of '+h.rows.length+' methods':'Primary method: '+h.label+(h.rows.length>1?' &middot; '+(h.rows.length-1)+' cross-check'+(h.rows.length>2?'s':''):'');
+  return'<div class="cv-appr"><div class="cv-appr-h"><div><div class="cv-appr-t">Valuation approach</div><div class="cv-appr-v">'+who+'</div></div><div style="text-align:right"><div class="cv-appr-t">Headline target rule</div><div class="cv-appr-v">'+rule+'</div></div></div>'
+    +h.rows.map(function(r){var m=METHODS[r.k],role=h.mode==='blend'?r.w.toFixed(0)+'% weight':(r.w?'&#9733; primary':'cross-check');
+      return'<div class="cv-m"><div class="cv-m-n" style="color:'+m.c+'">'+m.s+(r.k==='peers'?' ('+PEER_BASIS[valSetup.peerBasis]+')':'')+'</div><div class="cv-m-trk"><div class="cv-m-bar" style="width:'+(h.mode==='blend'?r.w:(r.w?100:12))+'%;background:'+m.c+(h.mode!=='blend'&&!r.w?';opacity:.35':'')+'"></div></div><div class="cv-m-r">&#8377;'+fm(r.tp,0)+' &middot; '+role+'</div></div>';}).join('')
+    +'</div>';
+}
 function goTab(id){var t=document.querySelector('.tab[data-tab="'+id+'"]');if(t)go(id,t);}
 
 /* ==================== OVERVIEW ==================== */
@@ -1365,6 +1375,13 @@ function printReport(){
     +'.cv-tbox{border:1px solid #E2E8F8;border-radius:12px;padding:16px 22px;min-width:150px}'
     +'.cv-tl{font-size:10px;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em}'
     +'.cv-tv{font-size:26px;font-weight:900;margin-top:4px}'
+    +'.cv-appr{margin-top:22px;border:1px solid #E2E8F8;border-left:4px solid #4361EE;border-radius:12px;padding:14px 18px;background:#FBFBFE}'
+    +'.cv-appr-h{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:10px}'
+    +'.cv-appr-t{font-size:10px;color:#94A3B8;text-transform:uppercase;letter-spacing:.08em}'
+    +'.cv-appr-v{font-size:14px;font-weight:800;color:#1E293B}'
+    +'.cv-m{display:flex;align-items:center;gap:10px;font-size:11px;margin:5px 0}'
+    +'.cv-m-n{width:170px;font-weight:700}.cv-m-trk{flex:1;height:8px;background:#EEF2FF;border-radius:4px;overflow:hidden}'
+    +'.cv-m-bar{height:100%;border-radius:4px}.cv-m-r{width:150px;text-align:right;font-family:\'Courier New\',monospace;color:#475569}'
     +'.cv-bot{border-top:1px solid #E2E8F8;padding-top:14px;display:flex;justify-content:space-between;font-size:10px;color:#475569}'
     +'.pg-hdr{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #E2E8F8;padding-bottom:8px;margin-bottom:14px;font-size:9px;color:#94A3B8}'
     +'.pg-hdr b{color:#4361EE}'
@@ -1417,9 +1434,8 @@ function printReport(){
     +'<div class="cv-tgt">'
     +'<div class="cv-tbox"><div class="cv-tl">Current Price</div><div class="cv-tv" style="color:#475569">&#8377;'+fm(co.currentPrice,0)+'</div></div>'
     +'<div class="cv-tbox" style="background:'+vbg+'"><div class="cv-tl">Target Price &middot; '+hl.label+'</div><div class="cv-tv" style="color:'+rc+'">&#8377;'+fm(hl.tp,0)+'</div></div>'
-    +'<div class="cv-tbox"><div class="cv-tl">Upside / Downside</div><div class="cv-tv" style="color:'+uc+'">'+sgn(hl.up)+'%</div></div>'
-    +'<div class="cv-tbox"><div class="cv-tl">'+(M.fcff?'DCF (FCFF) Value':'Methods Used')+'</div><div class="cv-tv" style="color:#4361EE">'+(M.fcff?'&#8377;'+fm(v.tp,0):hl.rows.length)+'</div></div>'
-    +'</div></div>'
+    +'<div class="cv-tbox"><div class="cv-tl">Upside / Downside</div><div class="cv-tv" style="color:'+uc+'">'+sgn(hl.up)+'</div></div>'
+    +'</div>'+coverApproach(hl)+'</div>'
     +'<div class="cv-bot"><div><b>Prepared by Vipin&#39;s ValuMetrics&#8482;</b><br>Tel: 8160203197 &nbsp;|&nbsp; audit.vipin@gmail.com</div><div style="text-align:right">Report date: '+ts+'<br>For analytical use only &mdash; not investment advice.</div></div></div>';
   var PH=function(t){return'<div class="pg-hdr"><span><b>'+esc(co.name)+'</b> &mdash; Valuation Report</span><span>'+t+'</span></div>';};
   // ---- PAGE 2: EXEC SUMMARY ----
