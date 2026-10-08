@@ -196,7 +196,7 @@ tr.rh td{font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppe
 <div id="yr-bar">
   <span class="yl">&#128197; FISCAL YEARS</span>
   <span class="ys">Starting FY:</span>
-  <input id="start-inp" type="number" value="2022" min="1990" max="2090" onchange="setStartYear(+this.value)">
+  <input id="start-inp" type="number" value="2024" min="1990" max="2090" onchange="setStartYear(+this.value)">
   <div id="yr-pills" style="display:flex;gap:5px;flex-wrap:wrap"></div>
   <span class="ys" style="margin-left:auto">Forecast:</span>
   <div class="mode-tog">
@@ -295,7 +295,7 @@ tr.rh td{font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppe
 <script>
 /* ==================== STATE ==================== */
 var N=8, ACT=3;
-var startYear=2022, YR=[], YS=[];
+var startYear=2024, YR=[], YS=[];
 var forecastMode='driver';
 function updateYears(){
   YR=[];YS=[];
@@ -312,78 +312,82 @@ function setMode(m){forecastMode=m;updateYears();render();}
 
 var ea=false, ct='overview', pParsed=null, bParsed=null;
 
-var co={name:'Vipin Corporation Ltd.',sector:'Industrial Manufacturing',currency:'INR (₹ Cr)',reportingDate:'March',
-  currentPrice:310, sharesOutstanding:10, dilutedShares:10.3, beta:1.05, riskFreeRate:7, equityRiskPremium:5.5,
-  terminalGrowthRate:4.5, wacc:11.4, costOfDebt:8.5, taxRate:25, targetDebtEquity:0.30,
-  yr52High:366, yr52Low:252, dividendPayout:25,
+var co={name:'Vipin Corporation Ltd.',sector:'Industrial Engineering (pumps, valves & motors)',currency:'INR (₹ Cr)',reportingDate:'March',
+  currentPrice:805, sharesOutstanding:6.2, dilutedShares:6.3, beta:1.0, riskFreeRate:6.9, equityRiskPremium:5.5,
+  terminalGrowthRate:6.0, wacc:11.9, costOfDebt:9.0, taxRate:25.2, targetDebtEquity:0.10,
+  yr52High:948, yr52Low:662, dividendPayout:20,
   // EV -> Equity bridge items (Cr)
-  minorityInterest:35, investmentsAssociates:40, preferredEquity:0, leaseLiabilities:60, includeLeases:true,
+  minorityInterest:22, investmentsAssociates:38, preferredEquity:0, leaseLiabilities:48, includeLeases:true,
   // Terminal value cross-check
-  exitEvEbitda:9, midYear:true,
+  exitEvEbitda:10, midYear:true,
   // VC method: exit multiple on exit-year metric, discounted at the investor's target IRR
   vcMetric:'pat', vcMultiple:18, vcIRR:25, vcYears:5, vcInvestment:300, vcDilution:10};
 
+// Sample company: 3 actual years (FY24-FY26) + 5 forecast years (FY27E-FY31E), INR crore
 var pnl={
-  revenue:    [850, 980, 1120, 1290, 1480, 1690, 1925, 2185],
-  cogs:       [510, 578,  650,  742,  844,  962, 1093, 1238],
-  otherOpEx:  [130, 148,  168,  190,  215,  245,  279,  317],
-  da:         [ 42,  48,   55,   63,   72,   82,   93,  105],
-  interestExp:[ 28,  30,   32,   34,   36,   38,   40,   42],
-  otherIncome:[  8,  10,   12,   14,   16,   18,   20,   22],
-  taxRate:    [ 25,  25,   25,   25,   25,   25,   25,   25]
+  revenue:    [2140, 2415, 2688, 3037, 3402, 3776, 4154, 4528],
+  cogs:       [1327, 1485, 1640, 1847, 2062, 2285, 2509, 2735],
+  otherOpEx:  [471, 524, 575, 647, 721, 793, 868, 942],
+  da:         [68, 76, 85, 95, 107, 120, 134, 149],
+  interestExp:[42, 39, 35, 30, 27, 25, 22, 19],
+  otherIncome:[14, 17, 21, 24, 27, 30, 33, 36],
+  taxRate:    [25.2, 25.2, 25.2, 25.2, 25.2, 25.2, 25.2, 25.2]
 };
 var bs={
-  cash:        [ 80,  95, 120, 150, 185, 225, 272, 328],
-  receivables: [130, 155, 175, 200, 230, 262, 298, 338],
-  inventory:   [145, 165, 188, 215, 245, 279, 318, 361],
-  otherCA:     [ 30,  35,  40,  45,  50,  57,  65,  74],
-  grossBlock:  [620, 700, 790, 890,1000,1125,1265,1420],
-  accDepr:     [180, 228, 283, 346, 418, 500, 593, 698],
-  otherNCA:    [ 45,  50,  55,  60,  65,  71,  78,  85],
-  payables:    [ 90, 105, 120, 138, 158, 180, 205, 233],
-  shortDebt:   [ 60,  65,  70,  75,  80,  85,  90,  95],
-  otherCL:     [ 40,  45,  50,  55,  60,  65,  70,  75],
-  longDebt:    [200, 190, 180, 170, 160, 150, 140, 130],
-  otherNCL:    [ 25,  28,  30,  32,  35,  38,  40,  43],
-  shareCapital:[100, 100, 100, 100, 100, 100, 100, 100]
+  cash:        [95, 146, 218, 303, 436, 615, 825, 1076],
+  receivables: [440, 483, 530, 599, 662, 724, 797, 868],
+  inventory:   [356, 391, 422, 476, 525, 576, 632, 689],
+  otherCA:     [86, 95, 104, 118, 133, 147, 162, 177],
+  grossBlock:  [980, 1090, 1215, 1367, 1537, 1718, 1909, 2113],
+  accDepr:     [310, 386, 471, 566, 672, 792, 926, 1075],
+  otherNCA:    [120, 132, 145, 164, 184, 204, 224, 244],
+  payables:    [255, 288, 318, 359, 401, 444, 488, 532],
+  shortDebt:   [120, 110, 95, 95, 95, 95, 95, 95],
+  otherCL:     [105, 118, 130, 146, 163, 181, 199, 217],
+  longDebt:    [300, 270, 240, 210, 180, 150, 120, 90],
+  otherNCL:    [45, 50, 55, 61, 68, 76, 83, 91],
+  shareCapital:[62, 62, 62, 62, 62, 62, 62, 62]
 };
 
-// Forecast drivers (arrays of 5 = forecast years FY4..FY8)
+// Forecast drivers (arrays of 5 = forecast years FY27E..FY31E)
 var drivers={
-  revGrowth:   [14, 12, 10, 9, 8],
-  grossMargin: [42.5, 43, 43, 43.5, 43.5],
-  otherOpexPct:[14.7, 14.6, 14.5, 14.5, 14.5],
-  daPctGross:  [8, 8, 8, 8, 8],
-  capexPct:    [8.5, 8, 7.5, 7, 6.5],
-  interestRate:[9, 9, 9, 9, 9],
-  otherIncPct: [1.0, 1.0, 1.0, 1.0, 1.0],
-  taxRate:     [25, 25, 25, 25, 25],
-  recvDays:    [57, 57, 56, 56, 56],
-  invDays:     [106, 106, 105, 105, 105],
-  payDays:     [68, 68, 68, 68, 68],
-  otherCApct:  [3.5, 3.4, 3.4, 3.4, 3.4],
-  otherNCApct: [4.6, 4.6, 4.5, 4.5, 4.5],
-  otherCLpct:  [4.3, 4.2, 4.2, 4.2, 4.2],
-  otherNCLpct: [2.5, 2.4, 2.3, 2.3, 2.3],
-  debtChange:  [-10, -10, -10, -10, -10]
+  revGrowth:   [13, 12, 11, 10, 9],
+  grossMargin: [39.2, 39.4, 39.5, 39.6, 39.6],
+  otherOpexPct:[21.3, 21.2, 21.0, 20.9, 20.8],
+  daPctGross:  [7.8, 7.8, 7.8, 7.8, 7.8],
+  capexPct:    [5.0, 5.0, 4.8, 4.6, 4.5],
+  interestRate:[9.0, 9.0, 9.0, 9.0, 9.0],
+  otherIncPct: [0.8, 0.8, 0.8, 0.8, 0.8],
+  taxRate:     [25.2, 25.2, 25.2, 25.2, 25.2],
+  recvDays:    [72, 71, 70, 70, 70],
+  invDays:     [94, 93, 92, 92, 92],
+  payDays:     [71, 71, 71, 71, 71],
+  otherCApct:  [3.9, 3.9, 3.9, 3.9, 3.9],
+  otherNCApct: [5.4, 5.4, 5.4, 5.4, 5.4],
+  otherCLpct:  [4.8, 4.8, 4.8, 4.8, 4.8],
+  otherNCLpct: [2.0, 2.0, 2.0, 2.0, 2.0],
+  debtChange:  [-30, -30, -30, -30, -30]
 };
 
+// Listed peers (fictional), multiples on trailing financials
 var peers=[
-  {name:'Peer Co A', mcap:2200, evEbitda:11.5, pe:18.0, pb:2.8, evSales:1.8},
-  {name:'Peer Co B', mcap:3800, evEbitda:13.2, pe:22.5, pb:3.4, evSales:2.4},
-  {name:'Peer Co C', mcap:1500, evEbitda:9.8,  pe:15.5, pb:2.1, evSales:1.4},
-  {name:'Peer Co D', mcap:4500, evEbitda:14.5, pe:24.0, pb:3.8, evSales:2.7}
+  {name:'Shakti Flow Engineering', mcap:7400, evEbitda:13.6, pe:22.4, pb:4.6, evSales:2.5},
+  {name:'Meridian Industrial Systems', mcap:4600, evEbitda:11.2, pe:18.1, pb:3.5, evSales:1.8},
+  {name:'Kaveri Pumps & Valves', mcap:3100, evEbitda:10.4, pe:16.8, pb:3.1, evSales:1.6},
+  {name:'Indus Precision Motors', mcap:11800, evEbitda:14.9, pe:24.6, pb:5.2, evSales:2.8},
+  {name:'Arya Electro-Mechanical', mcap:5300, evEbitda:12.0, pe:19.5, pb:4.0, evSales:2.1}
 ];
+
 var scnProb={bull:0.25, base:0.50, bear:0.25};
 // Valuation approach chosen by the investor: which methods to run and how the headline target is set
 var valSetup={chosen:false, profile:'', methods:{fcff:true,exit:true,fcfe:true,scn:true,peers:true,vc:true},
   mode:'primary', primary:'fcff', weights:{fcff:30,exit:10,fcfe:10,scn:20,peers:20,vc:10}, peerBasis:'ee'};
 var thesis={
   ratingOverride:'',
-  summary:'Vipin Corporation is a mid-cap manufacturer compounding revenue in the low-teens with steady margin expansion. We initiate with a fundamental DCF and peer-cross-checked view, balancing a healthy return profile against elevated current valuation.',
-  drivers:'• Double-digit revenue growth led by capacity additions and pricing\n• Gross margin expansion from mix and operating leverage\n• Improving working-capital discipline (lower receivable/inventory days)\n• De-leveraging balance sheet lowering interest burden',
-  risks:'• Demand cyclicality and input-cost inflation compressing margins\n• Capex execution risk and rising depreciation drag\n• Customer concentration / pricing pressure\n• Higher-for-longer rates raising cost of capital',
-  catalysts:'• Quarterly margin beats and order-book disclosures\n• Successful commissioning of new capacity\n• Debt reduction ahead of schedule\n• Re-rating toward peer multiples on delivery'
+  summary:'Vipin Corporation is a mid-cap Indian maker of industrial pumps, valves and motors, compounding revenue at 11-13% with EBITDA margins up from 16.0% to 17.6% over FY24-FY26. Returns are strong (ROE above 20%) and the balance sheet is close to net-cash. We value it on a DCF with peer and exit-multiple cross-checks; at ₹805 the shares trade close to intrinsic value, with modest upside on peer multiples.',
+  drivers:'• Order inflows from water infrastructure, irrigation and industrial capex\n• Gross margin gains from a richer mix of engineered products and exports\n• Operating leverage on a largely fixed employee and overhead base\n• Shorter working-capital cycle (receivable days 75 to 70)',
+  risks:'• Slowdown in government water and irrigation spending\n• Copper and steel price inflation squeezing gross margin\n• Competition from larger peers on large tenders\n• Execution risk on the new motor plant',
+  catalysts:'• Quarterly order-book and margin disclosures\n• Commissioning of the new motor plant in FY28\n• Export wins in the Middle East and Africa\n• Further deleveraging towards net-cash'
 };
 
 /* ==================== FORECAST BUILDER (driver mode) ==================== */
@@ -637,12 +641,12 @@ function ratingFromUpside(up){return up>=15?'STRONG BUY':up>=5?'BUY':up>=-5?'HOL
 function ratingColor(r){return r.indexOf('STRONG BUY')>=0?'#059669':r==='BUY'?'#10B981':r==='HOLD'?'#F59E0B':r==='SELL'?'#EF4444':'#B91C1C';}
 
 /* ==================== HELPERS ==================== */
-function fm(v,dec){dec=dec==null?1:dec;return(v==null||isNaN(v))?'&mdash;':Number(v).toLocaleString('en-IN',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
-function pc(v){return(v==null||isNaN(v)||!isFinite(v))?'&mdash;':Number(v).toFixed(1)+'%';}
+function fm(v,dec){dec=dec==null?1:dec;return(v==null||isNaN(v))?'-':Number(v).toLocaleString('en-IN',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+function pc(v){return(v==null||isNaN(v)||!isFinite(v))?'-':Number(v).toFixed(1)+'%';}
 function sgn(v,dec,suf){return(v>=0?'+':'')+v.toFixed(dec==null?1:dec)+(suf==null?'%':suf);}
 function arrow(v){return(v>=0?'&#9650; ':'&#9660; ')+Math.abs(v).toFixed(1)+'%';}
 function cg(c,p){return p?((c-p)/Math.abs(p))*100:null;}
-function ycell(c,p){var v=cg(c,p);if(v===null)return'<td style="color:#94A3B8">&mdash;</td>';return'<td style="color:'+(v>=0?'#10B981':'#EF4444')+'">'+arrow(v)+'</td>';}
+function ycell(c,p){var v=cg(c,p);if(v===null)return'<td style="color:#94A3B8">-</td>';return'<td style="color:'+(v>=0?'#10B981':'#EF4444')+'">'+arrow(v)+'</td>';}
 function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function nl2br(t){return esc(t).replace(/\n/g,'<br>');}
 function bullets(t){return'<ul>'+String(t||'').split('\n').filter(function(x){return x.trim();}).map(function(x){return'<li>'+esc(x.replace(/^[•\-\s]+/,''))+'</li>';}).join('')+'</ul>';}
@@ -662,7 +666,7 @@ function cellInp(setter,fld,i,val){
 function pInp(fld,i,val){return cellInp('sP',fld,i,val);}
 function bInp(fld,i,val){return cellInp('sB',fld,i,val);}
 function yhdr(){return YR.map(function(y,i){var c=isEst(i)?'#F59E0B':(ea?'#4361EE':'#94A3B8');var edit=(isEst(i)&&forecastMode==='manual')||(ea&&!isEst(i));return'<th style="color:'+c+'">'+YS[i]+(edit?' &#9998;':'')+'</th>';}).join('');}
-function ctrl(){var dn=forecastMode==='driver'?'<span style="color:#7209B7;font-weight:700">&#127922; Driver mode &mdash; forecasts computed from the Drivers tab</span>':'<span style="color:#F59E0B">&#9998; Manual mode &mdash; forecast cells editable</span>';return'<div class="ctrl-row"><button class="ctrl-btn" onclick="togEA()" style="background:'+(ea?'#EFF6FF':'#F1F5F9')+';border-color:'+(ea?'#4361EE':'#E2E8F8')+';color:'+(ea?'#4361EE':'#475569')+'">'+(ea?'&#128275; Actuals Unlocked':'&#128274; Actuals Locked')+'</button><button class="ctrl-btn" onclick="openModal()" style="background:#FFF7ED;border-color:#F59E0B;color:#F59E0B">&#128229; Import</button><span style="font-size:12px;color:#94A3B8">'+dn+'</span></div>';}
+function ctrl(){var dn=forecastMode==='driver'?'<span style="color:#7209B7;font-weight:700">&#127922; Driver mode: forecasts computed from the Drivers tab</span>':'<span style="color:#F59E0B">&#9998; Manual mode: forecast cells editable</span>';return'<div class="ctrl-row"><button class="ctrl-btn" onclick="togEA()" style="background:'+(ea?'#EFF6FF':'#F1F5F9')+';border-color:'+(ea?'#4361EE':'#E2E8F8')+';color:'+(ea?'#4361EE':'#475569')+'">'+(ea?'&#128275; Actuals Unlocked':'&#128274; Actuals Locked')+'</button><button class="ctrl-btn" onclick="openModal()" style="background:#FFF7ED;border-color:#F59E0B;color:#F59E0B">&#128229; Import</button><span style="font-size:12px;color:#94A3B8">'+dn+'</span></div>';}
 
 /* ==================== SHARED VALUATION WIDGETS (app + PDF report) ==================== */
 function sensCls(tp){var u=upside(tp);return u>=20?'hot':u>=5?'warm':u>=-10?'':u>=-25?'cool':'cold';}
@@ -701,8 +705,8 @@ function footballHtml(rows){
   var lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals),pad=(hi-lo)*0.08||1;lo-=pad;hi+=pad;
   function at(x){return(x-lo)/(hi-lo)*100;}
   return'<div style="padding:14px 0">'+rows.map(function(m){var a=at(Math.min(m.lo,m.hi)),w=Math.max(2,Math.abs(at(m.hi)-at(m.lo)));
-    return'<div class="ff-row"><div class="ff-lbl">'+m.l+'</div><div class="ff-trk"><div class="ff-bar" style="left:'+a+'%;width:'+w+'%;background:'+m.c+'">&#8377;'+fm(m.lo,0)+' &mdash; &#8377;'+fm(m.hi,0)+'</div><div class="ff-cmp" style="left:'+at(co.currentPrice)+'%"></div></div><div class="ff-val">med &#8377;'+fm(m.med,0)+'</div></div>';}).join('')
-    +'<div style="margin-top:10px;font-size:11px;color:#94A3B8;text-align:center">Scale: &#8377;'+fm(lo,0)+' &mdash; &#8377;'+fm(hi,0)+' &middot; Red line = CMP &#8377;'+co.currentPrice+'</div></div>';
+    return'<div class="ff-row"><div class="ff-lbl">'+m.l+'</div><div class="ff-trk"><div class="ff-bar" style="left:'+a+'%;width:'+w+'%;background:'+m.c+'">&#8377;'+fm(m.lo,0)+' to &#8377;'+fm(m.hi,0)+'</div><div class="ff-cmp" style="left:'+at(co.currentPrice)+'%"></div></div><div class="ff-val">med &#8377;'+fm(m.med,0)+'</div></div>';}).join('')
+    +'<div style="margin-top:10px;font-size:11px;color:#94A3B8;text-align:center">Scale: &#8377;'+fm(lo,0)+' to &#8377;'+fm(hi,0)+' &middot; Red line = CMP &#8377;'+co.currentPrice+'</div></div>';
 }
 function ratingOf(h){return thesis.ratingOverride||ratingFromUpside(h.up);}
 function upBg(u){return u>=15?'#F0FDF4':u>=5?'#EFF6FF':u>=-5?'#FFFBEB':u>=-15?'#FEF3C7':'#FEF2F2';}
@@ -718,9 +722,9 @@ function svgArea(data,keys,clrs,H){H=H||220;var W=560,ML=52,MR=10,MT=10,MB=36,cW
 <script>
 /* ==================== VALUATION APPROACH (investor-selected methods) ==================== */
 var METHODS={
-  fcff:{l:'DCF &mdash; FCFF (Gordon growth)',s:'DCF (FCFF)',c:'#4361EE',tab:'valuation',d:'Free cash flow to the firm discounted at WACC, Gordon terminal value. Best for stable, cash-generative businesses.'},
-  exit:{l:'DCF &mdash; Exit multiple',s:'DCF (exit multiple)',c:'#7209B7',tab:'valuation',d:'Same forecast, terminal value set by an exit EV/EBITDA multiple. Common in M&amp;A / PE pricing.'},
-  fcfe:{l:'DCF &mdash; FCFE (equity)',s:'FCFE',c:'#10B981',tab:'valuation',d:'Free cash flow to equity discounted at cost of equity. Suited to banks, insurers and leveraged firms.'},
+  fcff:{l:'DCF: FCFF (Gordon growth)',s:'DCF (FCFF)',c:'#4361EE',tab:'valuation',d:'Free cash flow to the firm discounted at WACC, Gordon terminal value. Best for stable, cash-generative businesses.'},
+  exit:{l:'DCF: Exit multiple',s:'DCF (exit multiple)',c:'#7209B7',tab:'valuation',d:'Same forecast, terminal value set by an exit EV/EBITDA multiple. Common in M&amp;A / PE pricing.'},
+  fcfe:{l:'DCF: FCFE (equity)',s:'FCFE',c:'#10B981',tab:'valuation',d:'Free cash flow to equity discounted at cost of equity. Suited to banks, insurers and leveraged firms.'},
   scn:{l:'Scenario-weighted DCF',s:'Scenario-weighted',c:'#06B6D4',tab:'analyst',d:'Bull / Base / Bear DCFs weighted by probability. For uncertain or high-growth stories.'},
   peers:{l:'Peer comparables',s:'Peer comps',c:'#F59E0B',tab:'peers',d:'Peer median multiple applied to the latest actual year. What the market pays for similar companies.'},
   vc:{l:'VC Method',s:'VC Method',c:'#8B5CF6',tab:'vc',d:'Exit value discounted at a venture target IRR, with dilution. For start-ups, pre-profit and pre-IPO.'}
@@ -784,16 +788,16 @@ function renderSetup(){
     var val=pv?pv.rows.filter(function(r){return r.k===k;})[0]:null;
     return'<div class="mth'+(on?' on':'')+'" style="border-color:'+(on?m.c:'#E2E8F8')+'"><label class="mth-h"><input type="checkbox" '+(on?'checked':'')+' onchange="dTog(\''+k+'\')"><span style="color:'+m.c+'">'+m.l+'</span></label>'
       +'<div class="mth-d">'+m.d+'</div>'
-      +(on?'<div class="mth-f">'+(val?'<span>&#8377;'+fm(val.tp,0)+' <b style="color:'+upClr(val.up)+'">'+sgn(val.up)+'</b></span>':'<span>&mdash;</span>')
+      +(on?'<div class="mth-f">'+(val?'<span>&#8377;'+fm(val.tp,0)+' <b style="color:'+upClr(val.up)+'">'+sgn(val.up)+'</b></span>':'<span>-</span>')
         +(blend?'<span>Weight <input type="number" min="0" step="5" value="'+(+draft.weights[k]||0)+'" onchange="dW(\''+k+'\',+this.value)"> '+(tw?Math.round((+draft.weights[k]||0)/tw*100):0)+'%</span>':'')
         +(k==='peers'?'<span><select onchange="dSet(\'peerBasis\',this.value)">'+Object.keys(PEER_BASIS).map(function(b){return'<option value="'+b+'"'+(draft.peerBasis===b?' selected':'')+'>'+PEER_BASIS[b]+'</option>';}).join('')+'</select></span>':'')
         +'</div>':'')+'</div>';}).join('')+'</div>';
   var how='<div class="mth-how"><label><input type="radio" name="hmode" '+(!blend?'checked':'')+' onchange="dSet(\'mode\',\'primary\')"> Single primary method: <select onchange="dSet(\'primary\',this.value)" '+(blend?'disabled':'')+'>'+sel.map(function(k){return'<option value="'+k+'"'+(draft.primary===k?' selected':'')+'>'+METHODS[k].s+'</option>';}).join('')+'</select></label>'
-    +'<label><input type="radio" name="hmode" '+(blend?'checked':'')+' onchange="dSet(\'mode\',\'blend\')"> Blended &mdash; weighted average of the selected methods</label></div>';
+    +'<label><input type="radio" name="hmode" '+(blend?'checked':'')+' onchange="dSet(\'mode\',\'blend\')"> Blended: weighted average of the selected methods</label></div>';
   var prev=ok?'<div class="mth-prev"><div><div class="dl">Headline target &middot; '+pv.label+'</div><div class="dv" style="font-size:26px;color:#4361EE">&#8377;'+fm(pv.tp,0)+'</div></div><div style="text-align:right"><div class="dl">vs CMP &#8377;'+co.currentPrice+'</div><div class="dv" style="color:'+upClr(pv.up)+'">'+arrow(pv.up)+' &middot; '+ratingFromUpside(pv.up)+'</div></div></div>'
     :'<div class="msg show err">Select at least one valuation method.</div>';
   document.getElementById('setup-body').innerHTML=
-    '<div class="mth-step"><b>1</b> What kind of company is this? <span>(optional &mdash; pre-selects suitable methods)</span></div>'+prof
+    '<div class="mth-step"><b>1</b> What kind of company is this? <span>(optional: pre-selects suitable methods)</span></div>'+prof
     +'<div class="mth-step"><b>2</b> Which valuation methods do you want to use?</div>'+cards
     +'<div class="mth-step"><b>3</b> How should the headline target price be set?</div>'+how+prev
     +'<div class="mbtns" style="justify-content:flex-end">'+(valSetup.chosen?'<button class="mbtn" style="background:#F1F5F9;color:#475569" onclick="closeSetup()">Cancel</button>':'')
@@ -812,7 +816,7 @@ function updateTabs(){
 function approachCard(){
   var h=HL,blend=h.mode==='blend';
   var rows=h.rows.map(function(r,i){var m=METHODS[r.k];return'<tr class="'+(i%2===0?'stripe':'')+'"><td class="left" style="font-weight:600;color:'+m.c+'">'+m.s+(r.k==='peers'?' <span style="color:#94A3B8;font-weight:400">('+PEER_BASIS[valSetup.peerBasis]+')</span>':'')+'</td><td style="font-weight:700">&#8377;'+fm(r.tp,0)+'</td><td style="color:'+upClr(r.up)+';font-weight:700">'+sgn(r.up)+'</td><td>'+(blend?r.w.toFixed(0)+'%':(r.w?'&#9733; Primary':'cross-check'))+'</td><td><button class="ctrl-btn" style="padding:3px 10px;font-size:11px;background:#F1F5F9;border-color:#E2E8F8;color:#4361EE" onclick="goTab(\''+m.tab+'\')">Open &rarr;</button></td></tr>';}).join('');
-  return card('Valuation Approach &mdash; '+h.label,'Methods chosen by the investor. The headline target drives the recommendation and the PDF report.',
+  return card('Valuation Approach: '+h.label,'Methods chosen by the investor. The headline target drives the recommendation and the PDF report.',
     '<div class="tbl-wrap"><table><thead><tr><th class="left">Method</th><th>Value / share</th><th>vs CMP</th><th>'+(blend?'Weight':'Role')+'</th><th></th></tr></thead><tbody>'+rows
     +'<tr class="tot"><td class="left" style="font-weight:800;color:#4361EE">Headline target</td><td style="font-weight:800;color:#4361EE">&#8377;'+fm(h.tp,0)+'</td><td style="font-weight:800;color:'+upClr(h.up)+'">'+sgn(h.up)+'</td><td>'+(blend?'100%':'')+'</td><td></td></tr></tbody></table></div>'
     +'<div class="ctrl-row" style="margin-top:12px;margin-bottom:0"><button class="ctrl-btn" onclick="openSetup()" style="background:#EEF2FF;border-color:#4361EE;color:#4361EE">&#127919; Change valuation approach</button></div>');
@@ -849,10 +853,10 @@ function renderOv(d,v){
   var rdt=YS.map(function(yr,i){return{yr:yr,ROCE:+d[i].roce.toFixed(1),ROE:+d[i].roe.toFixed(1)};});
   var balOk=d.every(function(x){return x.bal<0.5;});
   return'<div class="kpi-row">'+kpis.filter(function(k){return k.show!==false;}).map(function(k){return'<div class="kpi" style="border-top:3px solid '+k.c+'"><div class="kpi-lbl">'+k.l+'</div><div class="kpi-val" style="color:'+k.c+'">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';}).join('')+'</div>'
-    +'<div style="margin-bottom:18px;padding:10px 16px;border-radius:10px;background:'+(balOk?'#F0FDF4':'#FEF2F2')+';border:1px solid '+(balOk?'#10B981':'#EF4444')+';font-size:12px;color:'+(balOk?'#059669':'#EF4444')+';font-weight:600">'+(balOk?'&#10003; Balance sheet ties across all 8 years (Assets = Liabilities + Equity).':'&#9888; Balance sheet does not tie &mdash; check inputs.')+' &nbsp;Forecast mode: <b>'+(forecastMode==='driver'?'Driver-based':'Manual')+'</b></div>'
+    +'<div style="margin-bottom:18px;padding:10px 16px;border-radius:10px;background:'+(balOk?'#F0FDF4':'#FEF2F2')+';border:1px solid '+(balOk?'#10B981':'#EF4444')+';font-size:12px;color:'+(balOk?'#059669':'#EF4444')+';font-weight:600">'+(balOk?'&#10003; Balance sheet ties across all 8 years (Assets = Liabilities + Equity).':'&#9888; Balance sheet does not tie: check inputs.')+' &nbsp;Forecast mode: <b>'+(forecastMode==='driver'?'Driver-based':'Manual')+'</b></div>'
     +approachCard()
     +'<div class="chart-grid">'
-    +'<div class="chart-card">'+sh('Revenue &amp; Profitability',co.currency+' &mdash; 8-year view')+svgBar(cd,['Revenue','EBITDA','PAT'],['#CBD5E1','#4361EE','#10B981'])+'</div>'
+    +'<div class="chart-card">'+sh('Revenue &amp; Profitability',co.currency+', 8-year view')+svgBar(cd,['Revenue','EBITDA','PAT'],['#CBD5E1','#4361EE','#10B981'])+'</div>'
     +'<div class="chart-card">'+sh('Margin Trends','EBITDA % &middot; PAT %')+svgLine(cd,['EBITDAMgn','PATMgn'],['#4361EE','#10B981'],220,'%')+'</div>'
     +'<div class="chart-card">'+sh('Balance Sheet Structure',co.currency)+svgArea(bsd,['Assets','Equity','Debt'],['#94A3B8','#4361EE','#EF4444'])+'</div>'
     +'<div class="chart-card">'+sh('Return Ratios','ROCE &middot; ROE')+svgLine(rdt,['ROCE','ROE'],['#7209B7','#F59E0B'],220,'%')+'</div>'
@@ -889,7 +893,7 @@ function renderDrivers(d){
     var cells=fy.map(function(_,j){return'<td style="padding:3px 6px"><input class="num-inp drv" type="number" step="any" value="'+drivers[r.f][j]+'" '+(dis?'disabled style="opacity:.4"':'')+' onchange="sDrv(\''+r.f+'\','+j+',+this.value)"></td>';}).join('');
     return'<tr class="stripe"><td class="left" style="color:#475569">'+r.l+'</td>'+cells+'</tr>';
   }).join('');
-  var note=dis?'<div style="padding:12px 16px;background:#FFF7ED;border-left:4px solid #F59E0B;border-radius:8px;margin-bottom:14px;font-size:13px;color:#92400E">You are in <b>Manual</b> forecast mode &mdash; drivers are disabled. Switch to <b>Driver-based</b> (top bar) to forecast from these assumptions.</div>':'<div style="padding:12px 16px;background:#F3E8FF;border-left:4px solid #7209B7;border-radius:8px;margin-bottom:14px;font-size:13px;color:#6B21A8">Edit any assumption and the P&amp;L, Balance Sheet, Cash Flow, ratios and valuation rebuild instantly. The balance sheet stays balanced by construction (cash is the plug, reserves roll forward as PAT &minus; dividends).</div>';
+  var note=dis?'<div style="padding:12px 16px;background:#FFF7ED;border-left:4px solid #F59E0B;border-radius:8px;margin-bottom:14px;font-size:13px;color:#92400E">You are in <b>Manual</b> forecast mode: drivers are disabled. Switch to <b>Driver-based</b> (top bar) to forecast from these assumptions.</div>':'<div style="padding:12px 16px;background:#F3E8FF;border-left:4px solid #7209B7;border-radius:8px;margin-bottom:14px;font-size:13px;color:#6B21A8">Edit any assumption and the P&amp;L, Balance Sheet, Cash Flow, ratios and valuation rebuild instantly. The balance sheet stays balanced by construction (cash is the plug, reserves roll forward as PAT &minus; dividends).</div>';
   return'<div class="card">'+sh('Forecast Drivers &amp; Assumptions','Per-year assumptions for the 5 forecast years ('+fy[0]+' &ndash; '+fy[fy.length-1]+')')+note
     +'<div class="ag" style="margin-bottom:18px"><div class="af"><label>Dividend Payout Ratio (% of PAT)</label><input type="number" step="any" value="'+co.dividendPayout+'" onchange="sC(\'dividendPayout\',+this.value)"></div></div>'
     +'<div class="tbl-wrap"><table><thead><tr><th class="left">Assumption</th>'+fy.map(function(y){return'<th style="color:#F59E0B">'+y+'</th>';}).join('')+'</tr></thead><tbody>'+trs+'</tbody></table></div>'
@@ -927,7 +931,7 @@ function renderPnL(d){
     YR.forEach(function(_,i){var ec=isEst(i)?(row.clr||'#F59E0B'):(row.clr||(row.red?'#EF4444':null));if(row.cmp)cells+='<td style="'+(ec?'color:'+ec+';':'')+(row.bold?'font-weight:700':'')+'">'+ff(vals[i])+'</td>';else cells+=pInp(row.fld,i,vals[i]);});
     trs+='<tr class="'+tc+'"><td class="left '+(row.cls||'')+'" style="color:'+color+';'+(row.bold?'font-weight:700':'')+'">'+row.l+'</td>'+cells+ycell(vals[ACT],vals[ACT-1])+'</tr>';
   });
-  return'<div class="card">'+sh('Profit &amp; Loss Statement',co.currency+' &mdash; 3 Actuals + 5 Forecast Years')+ctrl()+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yhdr()+'<th>YoY F1</th></tr></thead><tbody>'+trs+'</tbody></table></div></div>';
+  return'<div class="card">'+sh('Profit &amp; Loss Statement',co.currency+', 3 Actuals + 5 Forecast Years')+ctrl()+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yhdr()+'<th>YoY F1</th></tr></thead><tbody>'+trs+'</tbody></table></div></div>';
 }
 
 /* ==================== BALANCE SHEET ==================== */
@@ -961,7 +965,7 @@ function renderBS(d){
     +mkr('Total Equity','',function(i){return d[i].eq;},{bold:1,sub:1})
     +mkr('TOTAL LIABILITIES &amp; EQUITY','',function(i){return d[i].tl;},{bold:1,tot:1,clr:'#7209B7'});
   var note=forecastMode==='driver'?'In driver mode, forecast Cash is the balancing plug from the Cash Flow Statement, and Reserves roll forward as prior Reserves + PAT &minus; Dividends. Actuals: Reserves is the historical balancing figure.':'Reserves &amp; Surplus is the auto-balancing figure for actuals.';
-  return'<div class="card">'+sh('Balance Sheet',co.currency+' &mdash; 3 Actuals + 5 Forecast Years')+ctrl()+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yhdr()+'<th>YoY F1</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="tbl-note">'+note+'</div></div>';
+  return'<div class="card">'+sh('Balance Sheet',co.currency+', 3 Actuals + 5 Forecast Years')+ctrl()+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yhdr()+'<th>YoY F1</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="tbl-note">'+note+'</div></div>';
 }
 
 /* ==================== CASH FLOW ==================== */
@@ -1002,12 +1006,12 @@ function renderCF(d){
     for(var i=0;i<N;i++){
       var c=d[i].cfs,val=c?r.g(c,i):null;
       var col=isEst(i)?(r.clr||'#F59E0B'):(r.red?'#EF4444':(r.clr||'inherit'));
-      cells+='<td style="color:'+col+';'+(r.bold?'font-weight:700':'')+'">'+(val==null?'&mdash;':fm(val))+'</td>';
+      cells+='<td style="color:'+col+';'+(r.bold?'font-weight:700':'')+'">'+(val==null?'-':fm(val))+'</td>';
     }
     var tc=r.tot?'tot':r.sub?'sub':'';
     return'<tr class="'+tc+'"><td class="left" style="'+(r.bold?'font-weight:700;':'')+'color:'+(r.clr||(r.red?'#EF4444':'#475569'))+'">'+r.l+'</td>'+cells+'</tr>';
   }).join('');
-  return'<div class="card">'+sh('Cash Flow Statement',co.currency+' &mdash; indirect method, derived from linked P&amp;L and Balance Sheet')+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yth()+'</tr></thead><tbody>'+trs+'</tbody></table></div><div class="tbl-note">First year shows &mdash; (no prior-year base). '+(forecastMode==='driver'?'In driver mode the statement fully articulates &mdash; Closing Cash equals the Balance Sheet cash and Reconciliation is zero.':'In manual mode, any gap between reported cash movement and the derived flows appears as <b>Other / Unexplained</b>.')+'</div></div>';
+  return'<div class="card">'+sh('Cash Flow Statement',co.currency+', indirect method, derived from linked P&amp;L and Balance Sheet')+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yth()+'</tr></thead><tbody>'+trs+'</tbody></table></div><div class="tbl-note">First year shows - (no prior-year base). '+(forecastMode==='driver'?'In driver mode the statement fully articulates: Closing Cash equals the Balance Sheet cash and Reconciliation is zero.':'In manual mode, any gap between reported cash movement and the derived flows appears as <b>Other / Unexplained</b>.')+'</div></div>';
 }
 /* ==================== RATIOS & DIAGNOSTICS ==================== */
 function renderRatios(d){
@@ -1038,11 +1042,11 @@ function renderRatios(d){
       {l:'Payable Days',vals:d.map(function(_,i){return ccc(d,i).pd;}),dec:0},
       {l:'Cash Conversion Cycle (days)',vals:d.map(function(_,i){return ccc(d,i).ccc;}),dec:0,clr:'#10B981'}]}
   ];
-  var trs='';secs.forEach(function(sec){trs+='<tr class="rh"><td colspan="'+(N+1)+'" style="border-top:2px solid '+sec.c+';color:'+sec.c+'">'+sec.l+'</td></tr>';sec.rows.forEach(function(row,ri){var f=row.fpc?pc:function(v){return fm(v,row.dec!=null?row.dec:1);};var cells=YR.map(function(_,i){var v=row.vals[i],c=isEst(i)?(row.clr||'#F59E0B'):(row.clr||'inherit');return'<td style="color:'+c+'">'+(v===null||v===undefined?'&mdash;':f(v))+'</td>';}).join('');trs+='<tr class="'+(ri%2===0?'stripe':'')+'"><td class="left i1" style="color:'+(row.clr||'#475569')+'">'+row.l+'</td>'+cells+'</tr>';});});
+  var trs='';secs.forEach(function(sec){trs+='<tr class="rh"><td colspan="'+(N+1)+'" style="border-top:2px solid '+sec.c+';color:'+sec.c+'">'+sec.l+'</td></tr>';sec.rows.forEach(function(row,ri){var f=row.fpc?pc:function(v){return fm(v,row.dec!=null?row.dec:1);};var cells=YR.map(function(_,i){var v=row.vals[i],c=isEst(i)?(row.clr||'#F59E0B'):(row.clr||'inherit');return'<td style="color:'+c+'">'+(v===null||v===undefined?'-':f(v))+'</td>';}).join('');trs+='<tr class="'+(ri%2===0?'stripe':'')+'"><td class="left i1" style="color:'+(row.clr||'#475569')+'">'+row.l+'</td>'+cells+'</tr>';});});
   return'<div class="card">'+sh('Financial Ratios &amp; KPIs','All metrics auto-computed across 8 years')+'<div class="tbl-wrap"><table><thead><tr><th class="left">Metric</th>'+yth()+'</tr></thead><tbody>'+trs+'</tbody></table></div></div>'
     +'<div class="card">'+sh('DuPont ROE Decomposition','ROE = Net Margin &times; Asset Turnover &times; Equity Multiplier')+'<div class="tbl-wrap">'+dpHtml+'</div></div>'
     +'<div class="card">'+sh('Solvency &amp; Quality Diagnostics',YR[ACT-1]+' &middot; latest actual')+'<div class="diag-grid">'
-    +'<div class="diag-box" style="border-left:4px solid '+alt.zc+'"><div class="diag-l">Altman Z-Score</div><div class="diag-v" style="color:'+alt.zc+'">'+alt.z.toFixed(2)+'</div><div class="diag-s" style="color:'+alt.zc+';font-weight:700">'+alt.zone+(alt.zone==='SAFE'?' &mdash; low distress risk':alt.zone==='GREY'?' &mdash; monitor':' &mdash; high distress risk')+'</div></div>'
+    +'<div class="diag-box" style="border-left:4px solid '+alt.zc+'"><div class="diag-l">Altman Z-Score</div><div class="diag-v" style="color:'+alt.zc+'">'+alt.z.toFixed(2)+'</div><div class="diag-s" style="color:'+alt.zc+';font-weight:700">'+alt.zone+(alt.zone==='SAFE'?': low distress risk':alt.zone==='GREY'?': monitor':': high distress risk')+'</div></div>'
     +'<div class="diag-box"><div class="diag-l">CFO / PAT</div><div class="diag-v" style="color:'+(qoe.cfoPat>=0.9?'#10B981':qoe.cfoPat>=0.7?'#F59E0B':'#EF4444')+'">'+qoe.cfoPat.toFixed(2)+'x</div><div class="diag-s">'+(qoe.cfoPat>=0.9?'Earnings backed by cash':qoe.cfoPat>=0.7?'Some accrual':'High accruals')+'</div></div>'
     +'<div class="diag-box"><div class="diag-l">Accruals / Total Assets</div><div class="diag-v" style="color:'+(Math.abs(qoe.accruals)<5?'#10B981':'#F59E0B')+'">'+qoe.accruals.toFixed(2)+'%</div><div class="diag-s">Lower is better (Sloan)</div></div>'
     +'<div class="diag-box"><div class="diag-l">Cash Conversion (CFO/EBITDA)</div><div class="diag-v" style="color:#4361EE">'+qoe.cashConv.toFixed(2)+'x</div><div class="diag-s">'+(qoe.cashConv>=0.8?'Strong':'Weak')+' cash translation</div></div>'
@@ -1063,20 +1067,20 @@ function renderValueCreation(d,vc){
     {l:'Economic Profit / EVA (Cr)',g:function(i){return fm(vc[i].ep,0);},ep:1,bold:1},
     {l:'Reinvestment Rate %',g:function(i){return vc[i].reinvest.toFixed(0)+'%';}},
     {l:'Implied Growth (ROIC&times;RR)',g:function(i){return vc[i].impliedG.toFixed(1)+'%';},clr:'#06B6D4'},
-    {l:'Actual Revenue Growth',g:function(i){return vc[i].actualG==null?'&mdash;':vc[i].actualG.toFixed(1)+'%';}}
+    {l:'Actual Revenue Growth',g:function(i){return vc[i].actualG==null?'-':vc[i].actualG.toFixed(1)+'%';}}
   ];
-  var trs=vcRows.map(function(r,ri){var cells='';for(var i=0;i<N;i++){var col=isEst(i)?'#F59E0B':'inherit';if(r.spread)col=vc[i].spread>=0?'#10B981':'#EF4444';if(r.ep)col=vc[i].ep>=0?'#10B981':'#EF4444';if(r.clr&&!isEst(i))col=r.clr;cells+='<td style="color:'+col+';'+(r.bold?'font-weight:700':'')+'">'+(i===0&&(r.l.indexOf('Reinvest')>=0||r.l.indexOf('Implied')>=0)?'&mdash;':r.g(i))+'</td>';}return'<tr class="'+(ri%2===0?'stripe':'')+'"><td class="left" style="'+(r.bold?'font-weight:700;':'')+'color:'+(r.clr||'#475569')+'">'+r.l+'</td>'+cells+'</tr>';}).join('');
+  var trs=vcRows.map(function(r,ri){var cells='';for(var i=0;i<N;i++){var col=isEst(i)?'#F59E0B':'inherit';if(r.spread)col=vc[i].spread>=0?'#10B981':'#EF4444';if(r.ep)col=vc[i].ep>=0?'#10B981':'#EF4444';if(r.clr&&!isEst(i))col=r.clr;cells+='<td style="color:'+col+';'+(r.bold?'font-weight:700':'')+'">'+(i===0&&(r.l.indexOf('Reinvest')>=0||r.l.indexOf('Implied')>=0)?'-':r.g(i))+'</td>';}return'<tr class="'+(ri%2===0?'stripe':'')+'"><td class="left" style="'+(r.bold?'font-weight:700;':'')+'color:'+(r.clr||'#475569')+'">'+r.l+'</td>'+cells+'</tr>';}).join('');
   var latest=vc[ACT-1],fwd=vc[N-1];
   var creates=latest.spread>=0;
   var consistent=Math.abs((fwd.impliedG||0)-(fwd.actualG||0))<5;
-  return'<div class="card">'+sh('Value Creation &mdash; ROIC vs WACC &amp; Economic Profit','McKinsey lens: value is created only when ROIC &gt; WACC. Growth must be funded by reinvestment.')+''
+  return'<div class="card">'+sh('Value Creation: ROIC vs WACC &amp; Economic Profit','McKinsey lens: value is created only when ROIC &gt; WACC. Growth must be funded by reinvestment.')+''
     +'<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px">'
     +'<div class="diag-box" style="flex:1 1 200px;border-left:4px solid '+(creates?'#10B981':'#EF4444')+'"><div class="diag-l">Value Creation ('+YR[ACT-1]+')</div><div class="diag-v" style="color:'+(creates?'#10B981':'#EF4444')+'">'+(creates?'CREATING':'DESTROYING')+'</div><div class="diag-s">ROIC '+latest.roic.toFixed(1)+'% '+(creates?'&gt;':'&lt;')+' WACC '+co.wacc.toFixed(1)+'% &rarr; '+(latest.spread>=0?'+':'')+latest.spread.toFixed(1)+'pp</div></div>'
     +'<div class="diag-box" style="flex:1 1 200px"><div class="diag-l">Economic Profit ('+YR[ACT-1]+')</div><div class="diag-v" style="color:'+(latest.ep>=0?'#10B981':'#EF4444')+'">&#8377;'+fm(latest.ep,0)+' Cr</div><div class="diag-s">NOPAT &minus; WACC &times; Invested Capital</div></div>'
     +'<div class="diag-box" style="flex:1 1 200px;border-left:4px solid '+(consistent?'#10B981':'#F59E0B')+'"><div class="diag-l">Growth Consistency ('+YR[N-1]+')</div><div class="diag-v" style="color:'+(consistent?'#10B981':'#F59E0B')+'">'+(consistent?'&#10003; OK':'&#9888; CHECK')+'</div><div class="diag-s">Implied g (ROIC&times;RR) '+fwd.impliedG.toFixed(1)+'% vs modelled '+(fwd.actualG||0).toFixed(1)+'%</div></div>'
     +'</div>'
     +'<div class="tbl-wrap"><table><thead><tr><th class="left">Metric</th>'+yth()+'</tr></thead><tbody>'+trs+'</tbody></table></div>'
-    +'<div class="tbl-note">If modelled revenue growth materially exceeds ROIC&times;Reinvestment Rate, the forecast assumes growth that is not funded by reinvestment &mdash; a classic optimistic-model red flag.</div></div>';
+    +'<div class="tbl-note">If modelled revenue growth materially exceeds ROIC&times;Reinvestment Rate, the forecast assumes growth that is not funded by reinvestment: a classic optimistic-model red flag.</div></div>';
 }
 
 /* ==================== DCF VALUATION ==================== */
@@ -1105,7 +1109,7 @@ function renderVal(d,v){
     {l:'Discount Factor (WACC '+co.wacc+'%)',vals:v.dfRow,dec:4},
     {l:'PV of FCFF',vals:v.pvRow,clr:'#10B981',bold:1}
   ];
-  var dtrs=drows.map(function(row,ri){var tc=ri%2===0?'stripe':'';var cells=YR.map(function(_,i){var val=row.vals[i];var c=isEst(i)?(row.clr||'#F59E0B'):(row.red?'#EF4444':(row.clr||'inherit'));return'<td style="color:'+c+';'+(row.bold?'font-weight:700':'')+'">'+(val===null||val===undefined?'&mdash;':fm(val,row.dec!=null?row.dec:1))+'</td>';}).join('');return'<tr class="'+tc+'"><td class="left" style="'+(row.bold?'font-weight:700;':'')+'color:'+(row.clr||(row.red?'#EF4444':'inherit'))+'">'+row.l+'</td>'+cells+'</tr>';}).join('');
+  var dtrs=drows.map(function(row,ri){var tc=ri%2===0?'stripe':'';var cells=YR.map(function(_,i){var val=row.vals[i];var c=isEst(i)?(row.clr||'#F59E0B'):(row.red?'#EF4444':(row.clr||'inherit'));return'<td style="color:'+c+';'+(row.bold?'font-weight:700':'')+'">'+(val===null||val===undefined?'-':fm(val,row.dec!=null?row.dec:1))+'</td>';}).join('');return'<tr class="'+tc+'"><td class="left" style="'+(row.bold?'font-weight:700;':'')+'color:'+(row.clr||(row.red?'#EF4444':'inherit'))+'">'+row.l+'</td>'+cells+'</tr>';}).join('');
   var dout=[
     {l:'PV of Explicit FCFFs',val:'&#8377; '+fm(v.pvf)+' Cr',bg:'#EEF2FF',c:'#475569'},
     {l:'Terminal Value (Gordon)',val:'&#8377; '+fm(v.tv)+' Cr',bg:'#F0FDF4',c:'#475569'},
@@ -1131,7 +1135,7 @@ function renderVal(d,v){
     +'<tr class="stripe"><td class="left" style="font-weight:600">Gordon Growth (g='+co.terminalGrowthRate+'%)</td><td>&#8377; '+fm(v.tv)+' Cr</td><td>&#8377; '+fm(v.pvt)+' Cr</td><td style="color:#4361EE;font-weight:700">&#8377; '+fm(v.tp,0)+'</td></tr>'
     +'<tr><td class="left" style="font-weight:600">Exit Multiple ('+co.exitEvEbitda+'x EBITDA)</td><td>&#8377; '+fm(v.tvExit)+' Cr</td><td>&#8377; '+fm(v.pvtExit)+' Cr</td><td style="color:#7209B7;font-weight:700">&#8377; '+fm(v.tpExit,0)+'</td></tr>'
     +'</tbody></table>';
-  return'<div class="card">'+sh('Valuation Assumptions','Edit anything &mdash; DCF, FCFE, scenarios, sensitivity all recalc instantly.')+'<div class="ag">'+afs.map(function(x){return'<div class="af"><label>'+x.l+'</label><input type="number" step="any" value="'+co[x.f]+'" onchange="sC(\''+x.f+'\',+this.value)"></div>';}).join('')+'</div>'+toggles+'</div>'
+  return'<div class="card">'+sh('Valuation Assumptions','Edit anything: DCF, FCFE, scenarios, sensitivity all recalc instantly.')+'<div class="ag">'+afs.map(function(x){return'<div class="af"><label>'+x.l+'</label><input type="number" step="any" value="'+co[x.f]+'" onchange="sC(\''+x.f+'\',+this.value)"></div>';}).join('')+'</div>'+toggles+'</div>'
     +'<div class="card">'+sh('WACC Build-up (CAPM)','Cost of equity via CAPM, weighted with after-tax cost of debt')+'<div class="wacc-grid"><div class="wacc-eq">'
     +'<div><b>Ke</b> = Rf + &beta;&times;ERP = '+co.riskFreeRate+'% + '+co.beta+'&times;'+co.equityRiskPremium+'% = <b>'+wb.ke.toFixed(2)+'%</b></div><br>'
     +'<div><b>Kd&middot;(1-T)</b> = '+co.costOfDebt+'%&times;(1&minus;'+co.taxRate+'%) = <b>'+(wb.kd*(1-wb.tax/100)).toFixed(2)+'%</b></div><br>'
@@ -1139,14 +1143,14 @@ function renderVal(d,v){
     +'<div><b>WACC</b> = '+wb.we.toFixed(1)+'%&times;'+wb.ke.toFixed(1)+'% + '+wb.wd.toFixed(1)+'%&times;'+(wb.kd*(1-wb.tax/100)).toFixed(1)+'% = <b style="color:#10B981;font-size:14px">'+wb.waccDerived.toFixed(2)+'%</b></div>'
     +'<div>Used in DCF: <b style="color:#F59E0B">'+wb.waccUsed.toFixed(2)+'%</b></div>'
     +'</div><div style="background:#FFF7ED;border-left:4px solid #F59E0B;border-radius:8px;padding:14px;font-size:12px;line-height:1.7;color:#475569"><b style="color:#F59E0B">&#9888; Reconciliation</b><br>'+(Math.abs(wb.waccDerived-wb.waccUsed)<0.5?'<span style="color:#10B981;font-weight:700">&#10003; DCF WACC is in line with the CAPM derivation.</span>':'<span style="color:#EF4444;font-weight:700">&#9888; Diverges from CAPM by '+Math.abs(wb.waccDerived-wb.waccUsed).toFixed(2)+'pp.</span> Adjust the WACC input or revisit Beta / ERP / D/E.')+'</div></div></div>'
-    +'<div class="card">'+sh('DCF &mdash; Free Cash Flow to Firm (FCFF)','5-year explicit forecast + Gordon terminal value &middot; TV = '+pctTV.toFixed(0)+'% of EV')+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yth()+'</tr></thead><tbody>'+dtrs+'</tbody></table></div><div class="do">'+dout.map(function(b){return'<div class="db" style="background:'+b.bg+'"><div class="dl">'+b.l+'</div><div class="dv" style="color:'+b.c+'">'+b.val+'</div></div>';}).join('')+'</div></div>'
+    +'<div class="card">'+sh('DCF: Free Cash Flow to Firm (FCFF)','5-year explicit forecast + Gordon terminal value &middot; TV = '+pctTV.toFixed(0)+'% of EV')+'<div class="tbl-wrap"><table><thead><tr><th class="left">Particulars</th>'+yth()+'</tr></thead><tbody>'+dtrs+'</tbody></table></div><div class="do">'+dout.map(function(b){return'<div class="db" style="background:'+b.bg+'"><div class="dl">'+b.l+'</div><div class="dv" style="color:'+b.c+'">'+b.val+'</div></div>';}).join('')+'</div></div>'
     +'<div class="mg"><div class="card">'+sh('EV &rarr; Equity Bridge','From enterprise to per-share value')+'<div class="tbl-wrap">'+brHtml+'</div><div class="tbl-note">Equity = EV &minus; Net Debt &minus; Minorities &minus; Preferred + Investments/Associates, then &divide; diluted shares.</div></div>'
     +'<div class="card">'+sh('Terminal Value Cross-Check &amp; Sanity','Gordon vs exit-multiple &middot; implied terminal multiple')+'<div class="tbl-wrap">'+tvHtml+'</div><div class="diag-grid" style="margin-top:12px">'
     +'<div class="diag-box" style="border-left:4px solid '+(tvHot?'#EF4444':'#10B981')+'"><div class="diag-l">TV as % of EV</div><div class="diag-v" style="color:'+(tvHot?'#EF4444':'#10B981')+'">'+pctTV.toFixed(0)+'%</div><div class="diag-s">'+(tvHot?'&#9888; High terminal dependence':'&#10003; Reasonable explicit contribution')+'</div></div>'
-    +'<div class="diag-box" style="border-left:4px solid '+(eeHot?'#F59E0B':'#10B981')+'"><div class="diag-l">Implied Terminal EV/EBITDA</div><div class="diag-v" style="color:'+(eeHot?'#F59E0B':'#10B981')+'">'+v.impTermEE.toFixed(1)+'x</div><div class="diag-s">'+(eeHot?'&#9888; Outside 6&ndash;16x &mdash; revisit g/WACC':'&#10003; Consistent with mature multiple')+'</div></div>'
+    +'<div class="diag-box" style="border-left:4px solid '+(eeHot?'#F59E0B':'#10B981')+'"><div class="diag-l">Implied Terminal EV/EBITDA</div><div class="diag-v" style="color:'+(eeHot?'#F59E0B':'#10B981')+'">'+v.impTermEE.toFixed(1)+'x</div><div class="diag-s">'+(eeHot?'&#9888; Outside 6&ndash;16x: revisit g/WACC':'&#10003; Consistent with mature multiple')+'</div></div>'
     +'<div class="diag-box" style="border-left:4px solid '+(gapPct>20?'#F59E0B':'#10B981')+'"><div class="diag-l">Gordon vs Exit Gap</div><div class="diag-v" style="color:'+(gapPct>20?'#F59E0B':'#10B981')+'">'+gapPct.toFixed(0)+'%</div><div class="diag-s">'+(gapPct>20?'&#9888; Methods disagree':'&#10003; Two TV methods corroborate')+'</div></div>'
     +'</div></div>'
-    +'<div class="mg"><div class="card">'+sh('FCFE Cross-Check','Equity DCF discounted at Ke '+fe.ke.toFixed(2)+'%')+'<div class="do" style="grid-template-columns:1fr 1fr"><div class="db" style="background:#EEF2FF"><div class="dl">PV of FCFE</div><div class="dv" style="color:#4361EE">&#8377; '+fm(fe.pv)+' Cr</div></div><div class="db" style="background:#FEF3C7"><div class="dl">PV Terminal</div><div class="dv">&#8377; '+fm(fe.pvt)+' Cr</div></div><div class="db" style="background:#F0FDF4"><div class="dl">Equity Value</div><div class="dv" style="color:#10B981">&#8377; '+fm(fe.eqVal)+' Cr</div></div><div class="db" style="background:#EEF2FF"><div class="dl">FCFE Target / Share</div><div class="dv" style="color:#4361EE">&#8377; '+fm(fe.tp,0)+'</div></div></div><div class="tbl-note">FCFE = CFO &minus; CapEx + Net Borrowing. '+(Math.abs(fe.tp-v.tp)/Math.max(1,v.tp)*100<15?'&#10003; Within 15% of the FCFF target &mdash; methods corroborate.':'&#9888; Diverges from FCFF target &mdash; driven by leverage / financing assumptions.')+'</div></div>'
+    +'<div class="mg"><div class="card">'+sh('FCFE Cross-Check','Equity DCF discounted at Ke '+fe.ke.toFixed(2)+'%')+'<div class="do" style="grid-template-columns:1fr 1fr"><div class="db" style="background:#EEF2FF"><div class="dl">PV of FCFE</div><div class="dv" style="color:#4361EE">&#8377; '+fm(fe.pv)+' Cr</div></div><div class="db" style="background:#FEF3C7"><div class="dl">PV Terminal</div><div class="dv">&#8377; '+fm(fe.pvt)+' Cr</div></div><div class="db" style="background:#F0FDF4"><div class="dl">Equity Value</div><div class="dv" style="color:#10B981">&#8377; '+fm(fe.eqVal)+' Cr</div></div><div class="db" style="background:#EEF2FF"><div class="dl">FCFE Target / Share</div><div class="dv" style="color:#4361EE">&#8377; '+fm(fe.tp,0)+'</div></div></div><div class="tbl-note">FCFE = CFO &minus; CapEx + Net Borrowing. '+(Math.abs(fe.tp-v.tp)/Math.max(1,v.tp)*100<15?'&#10003; Within 15% of the FCFF target: methods corroborate.':'&#9888; Diverges from FCFF target: driven by leverage / financing assumptions.')+'</div></div>'
     +'<div class="card">'+sh('Verdict (Base Case)')+'<div class="vbox" style="background:'+vbg+';border:2px solid '+vc2+'"><div style="font-size:12px;font-weight:600;color:#94A3B8;margin-bottom:6px">DCF VERDICT</div><div style="font-size:34px;font-weight:900;color:'+ratingColor(rating)+'">'+vc+'</div><div style="font-size:14px;line-height:1.8;margin-top:10px;color:#475569">CMP &#8377;'+co.currentPrice+' &nbsp;|&nbsp; Target &#8377;'+fm(v.tp,0)+'<br><span style="color:'+vc2+';font-weight:700">'+arrow(v.up)+' '+(v.up>=0?'upside':'downside')+'</span><br><span style="font-size:12px;color:#94A3B8">Full scenario &amp; peer cross-check &rarr; <b style="color:#4361EE">Analyst View</b></span></div></div></div></div>';
 }
 
@@ -1186,16 +1190,16 @@ function renderVC(d){
     {l:'New shares to issue &middot; issue price',v:fm(vc.newShares,2)+' Cr &middot; &#8377;'+fm(vc.pricePerNew,0)}
   );
   var stepHtml='<table><tbody>'+steps.map(function(r,i){return'<tr class="'+(r.tot?'tot':i%2===0?'stripe':'')+'"><td class="left" style="'+(r.b?'font-weight:700;':'')+'color:'+(r.c||'#475569')+'">'+r.l+'</td><td style="'+(r.b?'font-weight:700;':'')+'color:'+(r.c||'#475569')+'">'+r.v+'</td></tr>';}).join('')+'</tbody></table>';
-  var warn=!vc.feasible?'<div style="padding:12px 16px;background:#FEF2F2;border-left:4px solid #EF4444;border-radius:8px;margin-bottom:14px;font-size:13px;color:#991B1B">&#9888; Not investable on these terms &mdash; the investor would need '+fm(vc.curOwn,0)+'% of the company. Lower the investment or IRR, or raise the exit value.</div>':'';
+  var warn=!vc.feasible?'<div style="padding:12px 16px;background:#FEF2F2;border-left:4px solid #EF4444;border-radius:8px;margin-bottom:14px;font-size:13px;color:#991B1B">&#9888; Not investable on these terms: the investor would need '+fm(vc.curOwn,0)+'% of the company. Lower the investment or IRR, or raise the exit value.</div>':'';
   var kp=[
     {l:'Pre-money',val:'&#8377; '+fm(vc.preMoney,0)+' Cr',sub:'today, after dilution',c:'#10B981'},
     {l:'Post-money',val:'&#8377; '+fm(vc.postAdj,0)+' Cr',sub:'incl. &#8377;'+fm(vc.inv,0)+' Cr investment',c:'#4361EE'},
     {l:'Investor Stake',val:fm(vc.curOwn,1)+'%',sub:fm(vc.finalOwn,1)+'% at exit',c:'#7209B7'},
     {l:'VC Value / Share',val:'&#8377; '+fm(vc.tp,0),sub:arrow(vc.up)+' vs CMP',c:upClr(vc.up)},
-    {l:'IRR at CMP',val:vc.irrAtCmp==null?'&mdash;':vc.irrAtCmp.toFixed(1)+'%',sub:'buy at market cap, exit '+vc.exitYr,c:vc.irrAtCmp!=null&&vc.irrAtCmp>=co.vcIRR?'#10B981':'#F59E0B'}
+    {l:'IRR at CMP',val:vc.irrAtCmp==null?'-':vc.irrAtCmp.toFixed(1)+'%',sub:'buy at market cap, exit '+vc.exitYr,c:vc.irrAtCmp!=null&&vc.irrAtCmp>=co.vcIRR?'#10B981':'#F59E0B'}
   ];
   var kpHtml='<div class="kpi-row">'+kp.map(function(k){return'<div class="kpi" style="border-top:3px solid '+k.c+'"><div class="kpi-lbl">'+k.l+'</div><div class="kpi-val" style="color:'+k.c+'">'+k.val+'</div><div class="kpi-sub">'+k.sub+'</div></div>';}).join('')+'</div>';
-  return card('VC Method &mdash; Assumptions','Venture-capital (Sahlman) method: value the exit, discount at the investor&#39;s target IRR, back out ownership and pre-money.',inputs)
+  return card('VC Method: Assumptions','Venture-capital (Sahlman) method: value the exit, discount at the investor&#39;s target IRR, back out ownership and pre-money.',inputs)
     +kpHtml+warn
     +'<div class="mg">'+card('Step-by-Step Valuation','Exit year '+vc.exitYr+' &middot; '+vc.years+'-year hold','<div class="tbl-wrap">'+stepHtml+'</div>')
     +card('Sensitivity: Target IRR &times; Exit Multiple','Pre-money value per share. Blue outline = base case.','<div class="tbl-wrap">'+vcSensTable(vs)+'</div><div class="tbl-note">'+SENS_LEGEND+'</div>'
@@ -1205,13 +1209,13 @@ function renderVC(d){
 
 /* ==================== ANALYST VIEW ==================== */
 function scnLabel(k){var x=SCN[k];return'Rev growth '+sgn(x.rg,1,'pp')+'/yr &middot; Gross mgn '+sgn(x.m*100,0,'bps')+' &middot; g '+sgn(x.g*100,0,'bps');}
-function reverseRead(rev){return rev.impliedG>5?['#FEF2F2','<b style="color:#EF4444">Aggressive</b> &mdash; market pricing heroic growth.']:rev.impliedG<2?['#F0FDF4','<b style="color:#10B981">Conservative</b> &mdash; expectations look beatable.']:['#FFFBEB','<b style="color:#F59E0B">Reasonable</b> &mdash; in line with fundamentals.'];}
+function reverseRead(rev){return rev.impliedG>5?['#FEF2F2','<b style="color:#EF4444">Aggressive</b>: market pricing heroic growth.']:rev.impliedG<2?['#F0FDF4','<b style="color:#10B981">Conservative</b>: expectations look beatable.']:['#FFFBEB','<b style="color:#F59E0B">Reasonable</b>: in line with fundamentals.'];}
 function renderAnalyst(d,v){
   var sens=sensitivity(),scn=scenarios(),wtp=weightedTP(scn),rev=reverseDCF(),pi=peerImpliedFix(d),vc=calcVC(),vs=vcSensitivity();
   var pSum=scnProb.bull+scnProb.base+scnProb.bear,wUp=upside(wtp);
   var scns=[
     {k:'bull',l:'Bull Case',c:'#10B981',bg:'#F0FDF4',v:scn.bull,p:scnProb.bull,assum:scnLabel('bull')},
-    {k:'base',l:'Base Case',c:'#4361EE',bg:'#EFF6FF',v:scn.base,p:scnProb.base,assum:'As modelled &mdash; current assumptions'},
+    {k:'base',l:'Base Case',c:'#4361EE',bg:'#EFF6FF',v:scn.base,p:scnProb.base,assum:'As modelled: current assumptions'},
     {k:'bear',l:'Bear Case',c:'#EF4444',bg:'#FEF2F2',v:scn.bear,p:scnProb.bear,assum:scnLabel('bear')}
   ];
   var scnHtml='<div class="scn-grid">'+scns.map(function(s){return'<div class="scn" style="background:'+s.bg+';border-color:'+s.c+';color:'+s.c+'"><div class="scn-h">'+s.l+'</div><div style="font-size:11px;color:#475569;margin-bottom:4px">'+s.assum+'</div><div class="scn-tp" style="color:'+s.c+'">&#8377;'+fm(s.v.tp,0)+'</div><div class="scn-up" style="color:'+s.c+'">'+arrow(s.v.up)+' vs CMP</div><div class="scn-row"><span>EV</span><span>&#8377;'+fm(s.v.ev)+' Cr</span></div><div class="scn-row"><span>Probability</span><span><input type="number" step="0.05" min="0" max="1" value="'+s.p+'" onchange="sScnP(\''+s.k+'\',+this.value)" style="width:60px;border:1px solid #CBD5E1;border-radius:4px;padding:2px 6px;text-align:right;font-family:Courier New,monospace"></span></div></div>';}).join('')+'</div>'
@@ -1222,10 +1226,10 @@ function renderAnalyst(d,v){
     +'<div class="diag-box"><div class="diag-l">Implied Avg Revenue Growth</div><div class="diag-v" style="color:#7209B7">'+rev.impliedGrowth.toFixed(2)+'%</div><div class="diag-s">forecast-period growth required to justify CMP</div></div>'
     +'<div class="diag-box" style="background:'+rr[0]+'"><div class="diag-l">Read</div><div class="diag-s" style="font-size:12px;line-height:1.6;margin-top:4px">'+rr[1]+'</div></div></div>';}
   var dcfOn=useDcf();
-  return card('Football Field &mdash; Valuation Range','Your selected methods vs CMP &middot; approach: '+HL.label+'.',footballHtml(footballRows(v,sens,scn,wtp,pi,vc,vs)))
+  return card('Football Field: Valuation Range','Your selected methods vs CMP &middot; approach: '+HL.label+'.',footballHtml(footballRows(v,sens,scn,wtp,pi,vc,vs)))
     +(dcfOn?card('Sensitivity: WACC &times; Terminal Growth','Target price per share. Blue outline = base case.','<div class="tbl-wrap">'+dcfSensTable(sens)+'</div><div class="tbl-note">'+SENS_LEGEND+'</div>'):'')
-    +(dcfOn?card('Scenario Analysis &mdash; Bull / Base / Bear','Each scenario re-runs the full driver model. Edit probabilities (sum to 1.00).',scnHtml):'')
-    +(rev&&dcfOn?card('Reverse DCF &mdash; What is the Market Pricing In?','Solves for the growth that makes intrinsic value = CMP.',rvHtml):'');
+    +(dcfOn?card('Scenario Analysis: Bull / Base / Bear','Each scenario re-runs the full driver model. Edit probabilities (sum to 1.00).',scnHtml):'')
+    +(rev&&dcfOn?card('Reverse DCF: What is the Market Pricing In?','Solves for the growth that makes intrinsic value = CMP.',rvHtml):'');
 }
 /* ==================== PEERS ==================== */
 function renderPeers(d){
@@ -1234,7 +1238,7 @@ function renderPeers(d){
     +['mcap','evEbitda','pe','pb','evSales'].map(function(f){return'<td><input type="number" step="any" value="'+p[f]+'" onchange="sPeer('+i+',\''+f+'\',+this.value)" class="num-inp"></td>';}).join('')
     +'<td><button onclick="rmPeer('+i+')" style="background:#FEF2F2;color:#EF4444;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:700">&times;</button></td></tr>';}).join('');
   function statRow(label,obj,sym){return'<tr><td class="left" style="font-weight:600">'+label+'</td><td>'+obj.lo.toFixed(1)+sym+'</td><td style="color:#4361EE;font-weight:700">'+obj.med.toFixed(1)+sym+'</td><td>'+obj.hi.toFixed(1)+sym+'</td></tr>';}
-  return'<div class="card">'+sh('Peer Comparables','Add comparable listed companies &mdash; tool computes peer multiples and implied price.')+''
+  return'<div class="card">'+sh('Peer Comparables','Add comparable listed companies: tool computes peer multiples and implied price.')+''
     +'<div class="tbl-wrap"><table><thead><tr><th class="left">Company</th><th>Mkt Cap (Cr)</th><th>EV/EBITDA</th><th>P/E</th><th>P/BV</th><th>EV/Sales</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
     +'<div style="margin-top:12px"><button onclick="addPeer()" style="background:#4361EE;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-weight:700;cursor:pointer">+ Add Peer</button></div></div>'
     +(pi?('<div class="card">'+sh('Peer Multiple Statistics','Low &middot; Median &middot; High across '+peers.length+' peers')+'<div class="tbl-wrap"><table><thead><tr><th class="left">Metric</th><th>Low</th><th style="color:#4361EE">Median</th><th>High</th></tr></thead><tbody>'+statRow('EV / EBITDA',pi.ee,'x')+statRow('P / E',pi.pe,'x')+statRow('P / BV',pi.pb,'x')+statRow('EV / Sales',pi.es,'x')+'</tbody></table></div></div>'
@@ -1358,7 +1362,7 @@ function printReport(){
   var R='', secN=0;
   var ST=function(_,t){return'<div class="sec-title"><span class="sec-no">'+(++secN)+'</span>'+t+'</div>';};
   // styles
-  R+='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>'+esc(co.name)+' &mdash; Valuation Report</title><style>'
+  R+='<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>'+esc(co.name)+': Valuation Report</title><style>'
     +'*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
     +'body{font-family:\'Segoe UI\',Arial,sans-serif;color:#1E293B;background:#fff;font-size:10px}'
     +'.page{padding:26px 32px;page-break-after:always;position:relative;min-height:96vh}'
@@ -1428,7 +1432,7 @@ function printReport(){
   // ---- COVER ----
   var vbg=upBg(hl.up);
   R+='<div class="page cover"><div class="cv-top"><div class="cv-logo">Vipin&#39;s ValuMetrics&#8482;</div><div class="cv-tag">INSTITUTIONAL VALUATION &amp; FINANCIAL MODELLING</div></div>'
-    +'<div class="cv-mid"><div style="font-size:11px;color:#94A3B8;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Equity Research &mdash; Initiation</div>'
+    +'<div class="cv-mid"><div style="font-size:11px;color:#94A3B8;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Equity Research: Initiation</div>'
     +'<div class="cv-co">'+esc(co.name)+'</div><div class="cv-sec">'+esc(co.sector)+' &nbsp;&middot;&nbsp; '+esc(co.currency)+' &nbsp;&middot;&nbsp; FY End: '+esc(co.reportingDate)+'</div>'
     +'<div class="cv-rating" style="background:'+rc+'">'+rating+'</div>'
     +'<div class="cv-tgt">'
@@ -1436,8 +1440,8 @@ function printReport(){
     +'<div class="cv-tbox" style="background:'+vbg+'"><div class="cv-tl">Target Price &middot; '+hl.label+'</div><div class="cv-tv" style="color:'+rc+'">&#8377;'+fm(hl.tp,0)+'</div></div>'
     +'<div class="cv-tbox"><div class="cv-tl">Upside / Downside</div><div class="cv-tv" style="color:'+uc+'">'+sgn(hl.up)+'</div></div>'
     +'</div>'+coverApproach(hl)+'</div>'
-    +'<div class="cv-bot"><div><b>Prepared by Vipin&#39;s ValuMetrics&#8482;</b><br>Tel: 8160203197 &nbsp;|&nbsp; audit.vipin@gmail.com</div><div style="text-align:right">Report date: '+ts+'<br>For analytical use only &mdash; not investment advice.</div></div></div>';
-  var PH=function(t){return'<div class="pg-hdr"><span><b>'+esc(co.name)+'</b> &mdash; Valuation Report</span><span>'+t+'</span></div>';};
+    +'<div class="cv-bot"><div><b>Prepared by Vipin&#39;s ValuMetrics&#8482;</b><br>Tel: 8160203197 &nbsp;|&nbsp; audit.vipin@gmail.com</div><div style="text-align:right">Report date: '+ts+'<br>For analytical use only, not investment advice.</div></div></div>';
+  var PH=function(t){return'<div class="pg-hdr"><span><b>'+esc(co.name)+'</b>: Valuation Report</span><span>'+t+'</span></div>';};
   // ---- PAGE 2: EXEC SUMMARY ----
   R+='<div class="page">'+PH('Executive Summary')+ST('1','Executive Summary &amp; Investment Thesis');
   R+='<div class="lead">'+nl2br(thesis.summary)+'</div>';
@@ -1474,9 +1478,9 @@ function printReport(){
   // ---- PAGE 4: CASH FLOW + RATIOS ----
   R+='<div class="page">'+PH('Cash Flow &amp; Ratios')+ST('5','Cash Flow Statement');
   var cfRows=[['Net Profit (PAT)',function(i){return d[i].pat;}],['+ D&amp;A',function(i){return d[i].da;}],['CFO',function(i){return d[i].cfs.cfo;},'b'],['&minus; CapEx',function(i){return -d[i].cfs.capex;},'r'],['CFI',function(i){return d[i].cfs.cfi;},'b'],['Change in Debt',function(i){return d[i].cfs.dDebt;}],['&minus; Dividends',function(i){return -d[i].cfs.div;},'r'],['CFF',function(i){return d[i].cfs.cff;},'b'],['Net Change in Cash',function(i){return d[i].cfs.netcf;},'b'],['Closing Cash',function(i){return d[i].cfs.closeC;},'t'],['FCFE',function(i){return d[i].cfs.fcfe;},'b']];
-  R+='<table><thead><tr>'+yh+'</tr></thead><tbody>'+cfRows.map(function(r,ri){var cells='';for(var i=0;i<N;i++){var val=(i>=1&&d[i].cfs)?r[1](i):null;var bold=(r[2]==='b'||r[2]==='t');cells+='<td style="'+(isEst(i)?'color:#F59E0B;':r[2]==='r'?'color:#EF4444;':'')+(bold?'font-weight:700':'')+'">'+(val==null?'&mdash;':fm(val))+'</td>';}var tc=r[2]==='t'?'tot':r[2]==='b'?'sub':ri%2===0?'stripe':'';return'<tr class="'+tc+'"><td class="L" style="'+((r[2]==='b'||r[2]==='t')?'font-weight:700':'')+'">'+r[0]+'</td>'+cells+'</tr>';}).join('')+'</tbody></table>';
+  R+='<table><thead><tr>'+yh+'</tr></thead><tbody>'+cfRows.map(function(r,ri){var cells='';for(var i=0;i<N;i++){var val=(i>=1&&d[i].cfs)?r[1](i):null;var bold=(r[2]==='b'||r[2]==='t');cells+='<td style="'+(isEst(i)?'color:#F59E0B;':r[2]==='r'?'color:#EF4444;':'')+(bold?'font-weight:700':'')+'">'+(val==null?'-':fm(val))+'</td>';}var tc=r[2]==='t'?'tot':r[2]==='b'?'sub':ri%2===0?'stripe':'';return'<tr class="'+tc+'"><td class="L" style="'+((r[2]==='b'||r[2]==='t')?'font-weight:700':'')+'">'+r[0]+'</td>'+cells+'</tr>';}).join('')+'</tbody></table>';
   R+=ST('6','Key Ratios');
-  var rsec=[['Revenue Growth %',function(i){return i>0?((d[i].rev-d[i-1].rev)/Math.abs(d[i-1].rev)*100).toFixed(1)+'%':'&mdash;';}],['EBITDA Margin %',function(i){return d[i].em.toFixed(1)+'%';}],['ROCE %',function(i){return d[i].roce.toFixed(1)+'%';}],['ROE %',function(i){return d[i].roe.toFixed(1)+'%';}],['ROIC %',function(i){return vc[i].roic.toFixed(1)+'%';}],['ROIC &minus; WACC',function(i){return sgn(vc[i].spread,1,'pp');}],['Economic Profit (Cr)',function(i){return fm(vc[i].ep,0);}],['Debt/Equity',function(i){return d[i].de.toFixed(2);}],['Interest Cov.',function(i){return d[i].icov?d[i].icov.toFixed(1)+'x':'&mdash;';}],['Current Ratio',function(i){return d[i].cr.toFixed(2);}],['Cash Conv. Cycle',function(i){return Math.round(ccc(d,i).ccc)+'d';}]];
+  var rsec=[['Revenue Growth %',function(i){return i>0?((d[i].rev-d[i-1].rev)/Math.abs(d[i-1].rev)*100).toFixed(1)+'%':'-';}],['EBITDA Margin %',function(i){return d[i].em.toFixed(1)+'%';}],['ROCE %',function(i){return d[i].roce.toFixed(1)+'%';}],['ROE %',function(i){return d[i].roe.toFixed(1)+'%';}],['ROIC %',function(i){return vc[i].roic.toFixed(1)+'%';}],['ROIC &minus; WACC',function(i){return sgn(vc[i].spread,1,'pp');}],['Economic Profit (Cr)',function(i){return fm(vc[i].ep,0);}],['Debt/Equity',function(i){return d[i].de.toFixed(2);}],['Interest Cov.',function(i){return d[i].icov?d[i].icov.toFixed(1)+'x':'-';}],['Current Ratio',function(i){return d[i].cr.toFixed(2);}],['Cash Conv. Cycle',function(i){return Math.round(ccc(d,i).ccc)+'d';}]];
   R+='<table><thead><tr><th class="L">Metric</th>'+yth()+'</tr></thead><tbody>'+rsec.map(function(r,ri){var cells='';for(var i=0;i<N;i++)cells+='<td style="'+(isEst(i)?'color:#F59E0B':'')+'">'+r[1](i)+'</td>';return'<tr class="'+(ri%2===0?'stripe':'')+'"><td class="L">'+r[0]+'</td>'+cells+'</tr>';}).join('')+'</tbody></table>';
   R+=ST('7','Solvency &amp; Quality Diagnostics')+'<div class="diag-grid">'
     +'<div class="diag-box" style="border-left:3px solid '+alt.zc+'"><div class="diag-l">Altman Z</div><div class="diag-v" style="color:'+alt.zc+'">'+alt.z.toFixed(2)+' '+alt.zone+'</div><div class="diag-s">A '+alt.A.toFixed(2)+' B '+alt.B.toFixed(2)+' C '+alt.C.toFixed(2)+' D '+alt.D.toFixed(2)+' E '+alt.E.toFixed(2)+'</div></div>'
@@ -1488,7 +1492,7 @@ function printReport(){
   R+='</div>';
   // ---- PAGE 5: WACC + DCF (only when a DCF-family method is selected) ----
   if(dcfOn){
-  R+='<div class="page">'+PH('Valuation &mdash; DCF')+ST('8','Cost of Capital (WACC build-up)');
+  R+='<div class="page">'+PH('Valuation: DCF')+ST('8','Cost of Capital (WACC build-up)');
   R+='<table><tbody>'
     +'<tr class="stripe"><td class="L">Cost of Equity (Ke = Rf + &beta;&middot;ERP)</td><td>'+co.riskFreeRate+'% + '+co.beta+'&times;'+co.equityRiskPremium+'%</td><td style="font-weight:700;color:#4361EE">'+wb.ke.toFixed(2)+'%</td></tr>'
     +'<tr><td class="L">After-tax Cost of Debt</td><td>'+co.costOfDebt+'%&times;(1&minus;'+co.taxRate+'%)</td><td style="font-weight:700">'+(wb.kd*(1-wb.tax/100)).toFixed(2)+'%</td></tr>'
@@ -1496,7 +1500,7 @@ function printReport(){
     +'<tr class="tot"><td class="L"><b>WACC (derived)</b></td><td></td><td style="font-weight:800;color:#10B981">'+wb.waccDerived.toFixed(2)+'%</td></tr>'
     +'<tr><td class="L"><b>WACC used in DCF</b></td><td></td><td style="font-weight:800;color:#F59E0B">'+wb.waccUsed.toFixed(2)+'%</td></tr></tbody></table>';
   R+=ST('9','Discounted Cash Flow (FCFF)');
-  var dcfRows=[['EBIT',d.map(function(x){return fm(x.ebit);})],['NOPAT',d.map(function(x){return fm(x.nopat);}),'b'],['+ D&amp;A',d.map(function(x){return fm(x.da);})],['&minus; CapEx',d.map(function(x,i){return i===0?'&mdash;':fm(Math.max(0,x.gb-d[i-1].gb));}),'r'],['&minus; &Delta;NWC',YR.map(function(_,i){return i===0?'&mdash;':fm(d[i].nwc-d[i-1].nwc);}),'r'],['FCFF',v.fcf.map(function(x){return x===null?'&mdash;':fm(x);}),'b'],['Disc. Factor',v.dfRow.map(function(x){return x===null?'&mdash;':x.toFixed(4);})],['PV of FCFF',v.pvRow.map(function(x){return x===null?'&mdash;':fm(x);}),'b']];
+  var dcfRows=[['EBIT',d.map(function(x){return fm(x.ebit);})],['NOPAT',d.map(function(x){return fm(x.nopat);}),'b'],['+ D&amp;A',d.map(function(x){return fm(x.da);})],['&minus; CapEx',d.map(function(x,i){return i===0?'-':fm(Math.max(0,x.gb-d[i-1].gb));}),'r'],['&minus; &Delta;NWC',YR.map(function(_,i){return i===0?'-':fm(d[i].nwc-d[i-1].nwc);}),'r'],['FCFF',v.fcf.map(function(x){return x===null?'-':fm(x);}),'b'],['Disc. Factor',v.dfRow.map(function(x){return x===null?'-':x.toFixed(4);})],['PV of FCFF',v.pvRow.map(function(x){return x===null?'-':fm(x);}),'b']];
   R+='<table><thead><tr>'+yh+'</tr></thead><tbody>'+dcfRows.map(function(r,ri){var cells=r[1].map(function(val,i){return'<td style="'+(isEst(i)?'color:#F59E0B;':r[2]==='r'?'color:#EF4444;':'')+(r[2]==='b'?'font-weight:700':'')+'">'+val+'</td>';}).join('');return'<tr class="'+(r[2]==='b'?'sub':ri%2===0?'stripe':'')+'"><td class="L" style="'+(r[2]==='b'?'font-weight:700':'')+'">'+r[0]+'</td>'+cells+'</tr>';}).join('')+'</tbody></table>';
   R+='<div class="two" style="margin-top:6px"><div class="box"><h4 style="color:#4361EE">EV &rarr; Equity Bridge</h4><table><tbody>'
     +'<tr class="stripe"><td class="L">Enterprise Value (Gordon)</td><td style="font-weight:700;color:#4361EE">&#8377;'+fm(v.ev)+'</td></tr>'
@@ -1523,9 +1527,9 @@ function printReport(){
   R+='</div>';
   }
   // ---- PAGE 6: FOOTBALL + SENSITIVITY + SCENARIOS ----
-  R+='<div class="page">'+PH('Valuation Range'+(dcfOn?', Sensitivity &amp; Scenarios':''))+ST('12','Football Field &mdash; Valuation Range')+footballHtml(footballRows(v,sens,scn,wtp,pi,vcm,vs));
+  R+='<div class="page">'+PH('Valuation Range'+(dcfOn?', Sensitivity &amp; Scenarios':''))+ST('12','Football Field: Valuation Range')+footballHtml(footballRows(v,sens,scn,wtp,pi,vcm,vs));
   if(dcfOn){
-  R+=ST('10','Sensitivity &mdash; WACC &times; Terminal Growth');
+  R+=ST('10','Sensitivity: WACC &times; Terminal Growth');
   R+=dcfSensTable(sens);
   R+=ST('11','Scenario Analysis')+'<div class="scn-grid">'
     +'<div class="scn" style="background:#F0FDF4;border-color:#10B981"><div style="font-weight:800;color:#10B981">BULL ('+(scnProb.bull*100).toFixed(0)+'%)</div><div class="scn-tp" style="color:#10B981">&#8377;'+fm(scn.bull.tp,0)+'</div><div style="font-size:8px;color:#475569">'+(scn.bull.up>=0?'+':'')+scn.bull.up.toFixed(1)+'%</div></div>'
@@ -1536,7 +1540,7 @@ function printReport(){
   R+='</div>';
   // ---- PAGE 7: PEERS + REVERSE + THESIS RISKS + DISCLAIMER ----
   R+='<div class="page">'+PH('Method Detail &amp; Conclusion');
-  if(M.vc)R+=ST('13','VC Method &mdash; Investor Return Lens')+'<div class="two"><div><table><tbody>'
+  if(M.vc)R+=ST('13','VC Method: Investor Return Lens')+'<div class="two"><div><table><tbody>'
     +'<tr class="stripe"><td class="L">Exit '+vcm.multLbl+' on '+vcm.exitYr+' '+vcm.metricLbl+'</td><td>'+fm(vcm.mult)+'x &times; &#8377;'+fm(vcm.metric,0)+'</td></tr>'
     +'<tr><td class="L">Exit equity value</td><td>&#8377;'+fm(vcm.exitEq,0)+' Cr</td></tr>'
     +'<tr class="stripe"><td class="L">Target IRR &middot; hold &middot; MOIC</td><td>'+vcm.irr.toFixed(0)+'% &middot; '+vcm.years+'y &middot; '+fm(vcm.moic,2)+'x</td></tr>'
@@ -1544,14 +1548,14 @@ function printReport(){
     +'<tr class="stripe"><td class="L">Required stake today / at exit</td><td>'+fm(vcm.curOwn,1)+'% / '+fm(vcm.finalOwn,1)+'%</td></tr>'
     +'<tr><td class="L">Post-money &middot; Pre-money</td><td>&#8377;'+fm(vcm.postAdj,0)+' &middot; &#8377;'+fm(vcm.preMoney,0)+' Cr</td></tr>'
     +'<tr class="tot"><td class="L"><b>VC value / share</b></td><td style="font-weight:800;color:#8B5CF6">&#8377;'+fm(vcm.tp,0)+' ('+sgn(vcm.up)+')</td></tr>'
-    +'<tr><td class="L">IRR if bought at CMP</td><td style="font-weight:700">'+(vcm.irrAtCmp==null?'&mdash;':vcm.irrAtCmp.toFixed(1)+'%')+'</td></tr>'
+    +'<tr><td class="L">IRR if bought at CMP</td><td style="font-weight:700">'+(vcm.irrAtCmp==null?'-':vcm.irrAtCmp.toFixed(1)+'%')+'</td></tr>'
     +'</tbody></table></div><div>'+vcSensTable(vs)+'<div style="font-size:8px;color:#94A3B8;margin-top:2px">Pre-money value/share: target IRR &times; exit multiple</div></div></div>';
   if(pi&&M.peers){
     R+=ST('14','Peer Comparables');
     R+='<table><thead><tr><th class="L">Peer</th><th>Mkt Cap</th><th>EV/EBITDA</th><th>P/E</th><th>P/BV</th><th>EV/Sales</th></tr></thead><tbody>'+peers.map(function(p,i){return'<tr class="'+(i%2===0?'stripe':'')+'"><td class="L">'+esc(p.name)+'</td><td>&#8377;'+fm(p.mcap,0)+'</td><td>'+p.evEbitda.toFixed(1)+'x</td><td>'+p.pe.toFixed(1)+'x</td><td>'+p.pb.toFixed(1)+'x</td><td>'+p.evSales.toFixed(1)+'x</td></tr>';}).join('')+'<tr class="tot"><td class="L"><b>MEDIAN</b></td><td></td><td style="color:#4361EE;font-weight:800">'+pi.ee.med.toFixed(1)+'x</td><td style="color:#4361EE;font-weight:800">'+pi.pe.med.toFixed(1)+'x</td><td style="color:#4361EE;font-weight:800">'+pi.pb.med.toFixed(1)+'x</td><td style="color:#4361EE;font-weight:800">'+pi.es.med.toFixed(1)+'x</td></tr></tbody></table>';
     R+='<table style="margin-top:6px"><thead><tr><th class="L">Implied Price (median multiple)</th><th>EV/EBITDA</th><th>P/E</th><th>P/BV</th><th>EV/Sales</th></tr></thead><tbody><tr class="stripe"><td class="L">&#8377; per share</td><td style="color:#4361EE;font-weight:700">&#8377;'+fm(pi.impliedEE.med,0)+'</td><td style="color:#4361EE;font-weight:700">&#8377;'+fm(pi.impliedPE.med,0)+'</td><td style="color:#4361EE;font-weight:700">&#8377;'+fm(pi.impliedPB.med,0)+'</td><td style="color:#4361EE;font-weight:700">&#8377;'+fm(pi.impliedES.med,0)+'</td></tr></tbody></table>';
   }
-  if(rev&&dcfOn){R+=ST('15','Reverse DCF &mdash; Market-Implied Expectations')+'<div class="diag-grid"><div class="diag-box"><div class="diag-l">Implied Terminal g</div><div class="diag-v" style="color:#4361EE">'+rev.impliedG.toFixed(2)+'%</div><div class="diag-s">to justify CMP at WACC '+co.wacc+'%</div></div><div class="diag-box"><div class="diag-l">Implied Avg Rev Growth</div><div class="diag-v" style="color:#7209B7">'+rev.impliedGrowth.toFixed(2)+'%</div><div class="diag-s">market growth bet</div></div><div class="diag-box" style="background:'+reverseRead(rev)[0]+'"><div class="diag-l">Read</div><div class="diag-s" style="margin-top:3px">'+reverseRead(rev)[1]+'</div></div></div>';}
+  if(rev&&dcfOn){R+=ST('15','Reverse DCF: Market-Implied Expectations')+'<div class="diag-grid"><div class="diag-box"><div class="diag-l">Implied Terminal g</div><div class="diag-v" style="color:#4361EE">'+rev.impliedG.toFixed(2)+'%</div><div class="diag-s">to justify CMP at WACC '+co.wacc+'%</div></div><div class="diag-box"><div class="diag-l">Implied Avg Rev Growth</div><div class="diag-v" style="color:#7209B7">'+rev.impliedGrowth.toFixed(2)+'%</div><div class="diag-s">market growth bet</div></div><div class="diag-box" style="background:'+reverseRead(rev)[0]+'"><div class="diag-l">Read</div><div class="diag-s" style="margin-top:3px">'+reverseRead(rev)[1]+'</div></div></div>';}
   R+=ST('16','Conclusion &amp; Risk Assessment');
   R+='<div style="padding:14px;background:'+vbg+';border:2px solid '+rc+';border-radius:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px"><div><div style="font-size:9px;color:#475569;font-weight:700;text-transform:uppercase">Recommendation</div><div style="font-size:24px;font-weight:900;color:'+rc+'">'+rating+'</div><div style="font-size:10px;color:#475569">CMP &#8377;'+co.currentPrice+' &middot; Target &#8377;'+fm(hl.tp,0)+' ('+sgn(hl.up)+') &middot; '+hl.label+'</div></div><div style="text-align:right;font-size:10px;color:#475569;line-height:1.7">'+hl.rows.map(function(r){return'<div><b>'+METHODS[r.k].s+':</b> &#8377;'+fm(r.tp,0)+'</div>';}).join('')+'<div><b>Altman Z:</b> '+alt.z.toFixed(2)+' ('+alt.zone+')</div></div></div>';
   R+=driversRisks;
