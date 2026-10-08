@@ -2,6 +2,16 @@
 
 A single-file (`index.html`) browser app: open it in any modern browser, no build or server needed. Work auto-saves to the browser; use **Data → Backup** to export/import JSON.
 
+## Choose your valuation approach
+
+On first use (and anytime via the **🎯** header button) the investor picks how to value the company:
+
+1. **Company profile** (optional): Stable, High-growth, Start-up / VC-backed, Bank / insurer, M&A, or Full institutional. Each profile pre-selects suitable methods.
+2. **Methods**: tick any of DCF – FCFF, DCF – Exit multiple, DCF – FCFE, Scenario-weighted DCF, Peer comparables (choose EV/EBITDA, P/E, P/BV, EV/Sales or the average), and VC Method. Each card shows a live value per share.
+3. **Headline target**: either one **primary** method, or a **blended** weighted average.
+
+The headline target drives the recommendation, the Overview, the football field and the PDF report. Tabs for methods you didn't pick are hidden. The choice is saved with the model and included in the JSON backup.
+
 ## What it does
 
 | Tab | Contents |
